@@ -1,0 +1,1682 @@
+<title>Taller de Texturas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Figtree:ital,wght@0,400;0,600;0,700;1,400&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: sketchbook de artista — hoja clara con manchas de acuarela tras los títulos, fichas como láminas sueltas, notas a mano al margen. */
+:root{
+  --bg:#F7F5F1;        /* hoja de sketchbook */
+  --panel:#FFFFFF;     /* lámina */
+  --ink:#24211F;       /* tinta */
+  --muted:#6A635D;
+  --line:#E2DDD5;
+  --foam:#C24F78;      /* rosa pink foam */
+  --foam-soft:#F6E1E8;
+  --coffee:#8A5A35;    /* madera / borra */
+  --coffee-soft:#F1E6DA;
+  --warn:#A2560C;
+  --warn-soft:#FBEEDB;
+  --steel:#3F6585;--steel-soft:#E1EAF2;
+  --stone:#6F7466;--stone-soft:#E8EAE2;
+  --water:#2C7894;--water-soft:#DDEEF3;
+  --grass:#4E8236;--grass-soft:#E3EFD9;
+  --wash-a:rgba(194,79,120,.16);--wash-b:rgba(63,101,133,.13);--wash-c:rgba(138,90,53,.13);
+  --display:"Fraunces", Georgia, "Times New Roman", serif;
+  --body:"Figtree", "Segoe UI", system-ui, sans-serif;
+  --hand:"Caveat", "Segoe Print", "Bradley Hand", cursive;
+  --mono:"Figtree", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1B1A19;--panel:#252321;--ink:#EEEAE4;--muted:#ABA39A;--line:#3A3632;
+  --foam:#F08DB0;--foam-soft:#3D2430;--coffee:#D9A77D;--coffee-soft:#35281E;
+  --warn:#F2B65E;--warn-soft:#3A2C17;--steel:#94B9D8;--steel-soft:#1F2B36;--stone:#B9BEAE;--stone-soft:#2B2D27;
+  --water:#80C9E2;--water-soft:#16313A;--grass:#A3D186;--grass-soft:#1F2E19;
+  --wash-a:rgba(240,141,176,.12);--wash-b:rgba(148,185,216,.10);--wash-c:rgba(217,167,125,.10);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1B1A19;--panel:#252321;--ink:#EEEAE4;--muted:#ABA39A;--line:#3A3632;
+  --foam:#F08DB0;--foam-soft:#3D2430;--coffee:#D9A77D;--coffee-soft:#35281E;
+  --warn:#F2B65E;--warn-soft:#3A2C17;--steel:#94B9D8;--steel-soft:#1F2B36;--stone:#B9BEAE;--stone-soft:#2B2D27;
+  --water:#80C9E2;--water-soft:#16313A;--grass:#A3D186;--grass-soft:#1F2E19;
+  --wash-a:rgba(240,141,176,.12);--wash-b:rgba(148,185,216,.10);--wash-c:rgba(217,167,125,.10);color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65;padding-inline:16px;padding-block:0 64px;
+  background-image:radial-gradient(circle at 1px 1px, rgba(120,110,100,.10) 1px, transparent 1.2px);background-size:22px 22px}
+.wrap{max-width:1080px;margin-inline:auto}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.12;text-wrap:balance;margin:0;font-weight:600;font-variation-settings:"SOFT" 60}
+h2{font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:-.01em;position:relative;width:fit-content;max-width:100%}
+/* mancha de acuarela tras cada título de sección */
+h2::before{content:"";position:absolute;z-index:-1;left:-14px;top:.1em;width:calc(100% + 28px);height:1.15em;
+  background:radial-gradient(ellipse 55% 70% at 30% 55%,var(--wash-a),transparent 72%),radial-gradient(ellipse 50% 65% at 72% 45%,var(--wash-b),transparent 70%);
+  border-radius:48% 52% 45% 55%/60% 40% 60% 40%;filter:blur(1px)}
+.sec-head,header{isolation:isolate}
+h3{font-size:1.3rem}
+p{margin:0}
+a{color:var(--foam);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--foam);outline-offset:2px;border-radius:4px}
+.mono{font-family:var(--body);font-size:.9em}
+.label{font-family:var(--hand);font-size:1.35rem;line-height:1;color:var(--foam);display:inline-block;width:fit-content;transform:rotate(-2deg)}
+
+/* portada */
+header{padding-block:48px 30px;display:grid;gap:20px;position:relative}
+header::before{content:"";position:absolute;z-index:-1;right:-6%;top:6px;width:min(520px,80%);height:300px;
+  background:radial-gradient(ellipse 45% 50% at 35% 45%,var(--wash-a),transparent 70%),radial-gradient(ellipse 40% 45% at 65% 60%,var(--wash-b),transparent 70%),radial-gradient(ellipse 35% 40% at 55% 25%,var(--wash-c),transparent 70%);
+  filter:blur(6px);pointer-events:none}
+.tag{display:inline-flex;align-items:center;gap:10px;width:fit-content;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tag i{width:28px;height:2px;background:var(--foam);display:inline-block;border-radius:2px}
+h1{font-size:clamp(2.6rem,8vw,5.4rem);font-weight:400;letter-spacing:-.02em;line-height:1}
+h1 em{font-style:italic;color:var(--foam);font-weight:400}
+.subtitle{font-family:var(--hand);font-size:clamp(1.5rem,3vw,2rem);color:var(--coffee);transform:rotate(-1.5deg);width:fit-content;line-height:1}
+.lede{max-width:62ch;font-size:1.12rem;color:var(--muted)}
+.brief{background:var(--panel);border-radius:14px;padding:20px 22px;display:grid;gap:6px;max-width:740px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 10px 30px rgba(60,40,30,.07);position:relative;border:1px solid var(--line)}
+.brief::after{content:"";position:absolute;right:16px;top:-14px;width:64px;height:22px;background:var(--foam-soft);opacity:.9;transform:rotate(6deg);border-radius:2px}
+.brief b{color:var(--foam)}
+/* muestras como manchas de pigmento */
+.swatches{display:flex;flex-wrap:wrap;gap:22px 26px;padding-block:6px 20px}
+.sw{width:78px;height:54px;position:relative;border-radius:48% 52% 40% 60%/58% 42% 58% 42%;box-shadow:inset 0 0 10px rgba(0,0,0,.12)}
+.sw:nth-child(even){border-radius:58% 42% 55% 45%/45% 60% 40% 55%}
+.sw span{position:absolute;left:2px;top:calc(100% + 2px);font-family:var(--hand);font-size:1.05rem;color:var(--muted);white-space:nowrap}
+.sw.pvc{background:#FBFBFA;border:1px solid var(--line)}
+.sw.est{background:repeating-linear-gradient(90deg,#E9E9E6 0 6px,#DCDCD8 6px 7px)}
+.sw.cafe{background:radial-gradient(circle at 20% 30%,#7a5640 1.2px,transparent 1.6px) 0 0/7px 7px,#4A3022}
+.sw.mache{background:radial-gradient(circle at 60% 40%,#d9d4c8 2px,transparent 3px) 0 0/11px 9px,#ECE8DF}
+.sw.xps{background:#E8A5BE}
+.sw.yeso{background:radial-gradient(circle,#cfcfcf 1px,transparent 1.5px) 0 0/5px 5px,#F1F1EF}
+
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding-block:10px;margin-bottom:8px}
+nav.toc ul{list-style:none;margin:0;padding:0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav.toc a{display:block;white-space:nowrap;text-decoration:none;color:var(--ink);font-size:.92rem;padding:6px 14px;border-radius:999px;background:var(--panel);border:1px solid var(--line);transition:border-color .15s,color .15s}
+nav.toc a:hover{border-color:var(--foam);color:var(--foam)}
+
+section{isolation:isolate;padding-block:56px 8px;display:grid;gap:24px;scroll-margin-top:64px}
+.sec-head{display:grid;gap:10px;max-width:70ch}
+.sec-head p{color:var(--muted)}
+
+/* bases */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
+.base{background:var(--panel);border-radius:14px;padding:22px;display:grid;gap:10px;align-content:start;min-width:0;border:1px solid var(--line)}
+.base ul{margin:0;padding-left:1.1em;display:grid;gap:7px}
+.base li::marker{color:var(--foam)}
+
+/* fichas de receta como láminas */
+.recipes{display:grid;gap:26px}
+.card{background:var(--panel);border-radius:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);overflow:hidden;border:1px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.04),0 14px 34px rgba(60,40,30,.07)}
+@media (max-width:760px){.card{grid-template-columns:1fr}}
+.card .side{padding:24px;display:grid;gap:14px;align-content:start;background:radial-gradient(ellipse 80% 60% at 20% 10%,var(--wash-a),transparent 70%)}
+.card .main{padding:24px;display:grid;gap:14px;align-content:start;min-width:0}
+.card.cafe .side{background:radial-gradient(ellipse 80% 60% at 20% 10%,var(--wash-c),transparent 70%),var(--coffee-soft)}
+.card.foamy .side{background:radial-gradient(ellipse 80% 60% at 20% 10%,var(--wash-a),transparent 70%),var(--foam-soft)}
+.code{font-family:var(--hand);font-size:1.2rem;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.78rem;padding:3px 11px;border-radius:999px;background:var(--bg);color:var(--muted);white-space:nowrap;border:1px solid var(--line)}
+.ing{list-style:none;margin:0;padding:0;display:grid}
+.ing li{display:grid;grid-template-columns:7.2em 1fr;gap:10px;padding-block:7px;border-bottom:1px dashed var(--line);font-size:.96rem}
+.ing li:last-child{border-bottom:0}
+.ing b{font-family:var(--display);font-weight:600;font-size:.98rem;color:var(--foam);font-variant-numeric:tabular-nums}
+ol.steps{margin:0;padding-left:1.3em;display:grid;gap:7px}
+ol li::marker{font-family:var(--display);font-weight:600;color:var(--foam)}
+.tip{font-size:.96rem;padding:10px 14px 10px 40px;position:relative;background:var(--bg);border-radius:12px}
+.tip::before{content:"✎";position:absolute;left:14px;top:9px;color:var(--foam);font-size:1.05rem}
+.tip.cafe::before{color:var(--coffee)}
+.warn{font-size:.96rem;padding:10px 14px 10px 40px;position:relative;background:var(--warn-soft);border-radius:12px}
+.warn::before{content:"!";position:absolute;left:14px;top:9px;width:18px;height:18px;border-radius:50%;background:var(--warn);color:var(--panel);font-weight:700;font-size:.8rem;display:grid;place-items:center;line-height:1}
+.variant{border-top:1px dashed var(--line);padding-top:14px;display:grid;gap:8px}
+
+/* tabla */
+.tbl{overflow-x:auto;border-radius:14px;background:var(--panel);border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:.95rem}
+th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.76rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700}
+td:first-child{font-family:var(--display);font-weight:600}
+tr:last-child td{border-bottom:0}
+.dots{letter-spacing:.15em;color:var(--foam)}
+
+/* acabado */
+.finish{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px;counter-reset:f}
+.finish div{background:var(--panel);border-radius:14px;padding:18px;display:grid;gap:6px;counter-increment:f;border:1px solid var(--line)}
+.finish div::before{content:counter(f);font-family:var(--display);font-style:italic;font-size:2.2rem;color:var(--foam);line-height:1}
+
+.safety{isolation:isolate;background:var(--warn-soft);border-radius:16px;padding:24px;display:grid;gap:10px}
+.safety ul{margin:0;padding-left:1.1em;display:grid;gap:6px}
+.safety li::marker{color:var(--warn)}
+
+/* materiales */
+.mats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
+.mat-group{background:var(--panel);border-radius:14px;padding:20px 22px;display:grid;gap:10px;align-content:start;min-width:0;border:1px solid var(--line)}
+.mat-group h3{font-style:italic;font-weight:400}
+.mat-group dl{margin:0;display:grid}
+.mat-group dt{font-weight:700;font-size:.95rem;padding-top:9px;border-top:1px dashed var(--line)}
+.mat-group dt:first-child{border-top:0;padding-top:0}
+.mat-group dd{margin:0 0 9px;color:var(--muted);font-size:.92rem;line-height:1.45}
+
+/* las tres materias */
+.elem{--el:var(--coffee);--el-soft:var(--coffee-soft)}
+.elem.steel{--el:var(--steel);--el-soft:var(--steel-soft)}
+.elem.stone{--el:var(--stone);--el-soft:var(--stone-soft)}
+.elem-head{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.elem-head .sec-head{flex:1 1 280px;min-width:0}
+.elem-sym{width:84px;height:84px;flex:none;display:grid;place-items:center;font-family:var(--display);font-style:italic;font-size:2.1rem;color:var(--el);
+  background:radial-gradient(ellipse at 40% 40%,var(--el-soft),transparent 75%),var(--el-soft);border-radius:52% 48% 44% 56%/56% 44% 56% 44%}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr));gap:18px}
+.v{background:var(--panel);border-radius:16px;padding:20px;display:grid;gap:10px;align-content:start;min-width:0;border:1px solid var(--line);position:relative;overflow:hidden}
+.v::before{content:"";position:absolute;top:-30px;right:-30px;width:120px;height:90px;background:var(--el-soft);border-radius:50% 45% 55% 50%;opacity:.9;z-index:0}
+.v > *{position:relative;z-index:1}
+.v-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.v-top h3{font-size:1.2rem;color:var(--el)}
+.pal{display:flex;gap:3px;flex:none;padding-top:2px}
+.pal i{width:22px;height:20px;background:var(--c);display:block;border-radius:52% 48% 60% 40%/45% 60% 40% 55%;box-shadow:inset 0 0 4px rgba(0,0,0,.2)}
+.pal i:nth-child(2){border-radius:40% 60% 45% 55%/60% 40% 55% 45%}
+.look{font-family:var(--hand);font-size:1.25rem;line-height:1.2;color:var(--muted)}
+.v-mat{font-size:.94rem}
+.v ol{margin:0;padding-left:1.25em;display:grid;gap:5px;font-size:.94rem}
+.tipline{font-size:.9rem;background:var(--el-soft);border-radius:10px;padding:8px 12px}
+
+/* ilusiones */
+.illus{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px;align-items:start}
+.il{--il:var(--steel);--il-soft:var(--steel-soft);background:var(--panel);border-radius:16px;overflow:hidden;display:grid;min-width:0;border:1px solid var(--line)}
+.il.water{--il:var(--water);--il-soft:var(--water-soft)}
+.il.grass{--il:var(--grass);--il-soft:var(--grass-soft)}
+.il-head{background:radial-gradient(ellipse 70% 80% at 15% 20%,color-mix(in srgb,var(--il) 18%,transparent),transparent 70%),var(--il-soft);padding:22px;display:grid;gap:8px}
+.il-head h3{font-size:1.5rem;color:var(--il);font-style:italic;font-weight:400}
+.il-head p{font-size:.96rem}
+.trick{padding:14px 22px;border-bottom:1px dashed var(--line);display:grid;gap:5px}
+.trick h4{font-size:1.04rem;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.trick p{font-size:.94rem}
+.ok{font-family:var(--body);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 9px;border-radius:999px;background:var(--il-soft);color:var(--il);white-space:nowrap}
+.il-note{padding:14px 22px 18px;font-size:.9rem;color:var(--muted)}
+
+.best{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px}
+.best-box{background:var(--panel);border-radius:14px;padding:20px 22px;border:1px solid var(--line);display:grid;gap:10px;align-content:start;min-width:0}
+.best-box h3{font-size:1.15rem}
+.best-box ol{margin:0;padding-left:1.3em;display:grid;gap:6px;font-size:.95rem}
+td .dots{display:block}
+.note{display:block;font-size:.82rem;color:var(--muted);line-height:1.35}
+.tblnote{font-size:.93rem;color:var(--muted);max-width:75ch}
+table{min-width:980px}
+.prec{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px}
+.prec-box{background:var(--panel);border-radius:14px;padding:20px 22px;border:1px solid var(--line);border-top:4px solid var(--warn);display:grid;gap:10px;align-content:start;min-width:0}
+.prec-box h3{font-size:1.2rem}
+.prec-box ul{margin:0;padding-left:1.1em;display:grid;gap:8px;font-size:.95rem}
+.prec-box li::marker{color:var(--warn)}
+#seguridad{gap:24px}
+.masthead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px;padding-block:18px 16px;border-bottom:1px solid var(--line)}
+.mast-topic{flex:1 1 420px;min-width:0;font-family:var(--display);font-style:italic;font-size:clamp(1rem,1.8vw,1.15rem);line-height:1.35;color:var(--ink);max-width:62ch}
+.mast-author{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.mast-name{font-size:.88rem;font-weight:700;letter-spacing:.04em}
+.mast-ig{display:inline-flex;align-items:center;gap:6px;font-size:.88rem;font-weight:600;text-decoration:none;color:var(--foam);padding:5px 12px;border-radius:999px;background:var(--foam-soft)}
+.mast-ig:hover{text-decoration:underline}
+/* plataforma: portada con menú y páginas por tema */
+.home{display:grid;gap:18px;padding-block:28px 20px}
+.home-head{display:grid;gap:10px;max-width:68ch;isolation:isolate}
+.home-head p{color:var(--muted)}
+.home-group{font-size:1.05rem;font-family:var(--body);font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:16px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.tile{--t:var(--foam);--t-soft:var(--foam-soft);display:flex;gap:16px;align-items:flex-start;text-decoration:none;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;position:relative;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;min-width:0}
+.tile:hover{transform:translateY(-3px);border-color:var(--t);box-shadow:0 14px 30px rgba(60,40,30,.10)}
+.tile:focus-visible{outline:3px solid var(--t);outline-offset:3px}
+.t-sym{width:58px;height:58px;flex:none;display:grid;place-items:center;font-family:var(--display);font-style:italic;font-size:1.6rem;color:var(--t);background:var(--t-soft);border-radius:52% 48% 44% 56%/56% 44% 56% 44%}
+.t-body{display:grid;gap:4px;min-width:0}
+.t-body b{font-family:var(--display);font-size:1.25rem;font-weight:600;line-height:1.15}
+.t-body span{font-size:.92rem;color:var(--muted);line-height:1.4}
+.t-body em{font-style:normal;font-family:var(--hand);font-size:1.25rem;color:var(--t);line-height:1}
+.tiles-big .tile{flex-direction:column;padding:22px;min-height:190px}
+.tiles-big .tile::after{content:"";position:absolute;right:-40px;bottom:-50px;width:170px;height:130px;background:var(--t-soft);border-radius:50% 45% 55% 50%;opacity:.8;z-index:0}
+.tiles-big .tile > *{position:relative;z-index:1}
+.tiles-big .t-sym{width:72px;height:72px;font-size:2rem}
+.tiles-big .t-body b{font-size:1.6rem}
+.t-wood{--t:var(--coffee);--t-soft:var(--coffee-soft)}
+.t-steel{--t:var(--steel);--t-soft:var(--steel-soft)}
+.t-stone{--t:var(--stone);--t-soft:var(--stone-soft)}
+.t-water{--t:var(--water);--t-soft:var(--water-soft)}
+.t-grass{--t:var(--grass);--t-soft:var(--grass-soft)}
+.t-warn{--t:var(--warn);--t-soft:var(--warn-soft)}
+.t-plain{--t:var(--muted);--t-soft:var(--bg)}
+.to-home{font-weight:700;color:var(--foam)!important;border-color:var(--foam)!important}
+/* modo plataforma (con JS) */
+.platform.at-home nav.toc,.platform.at-home .page{display:none}
+.platform.at-page header,.platform.at-page .home{display:none}
+.platform .page:not(.active){display:none}
+.pager{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-block:40px 0;border-top:1px solid var(--line);margin-top:40px}
+.pager a{display:grid;gap:2px;text-decoration:none;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 18px;min-width:min(100%,220px);flex:1 1 220px}
+.pager a:hover{border-color:var(--foam)}
+.pager small{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.pager b{font-family:var(--display);font-size:1.15rem;font-weight:600}
+.pager .next{text-align:right}
+.pager[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.tile{transition:none}.tile:hover{transform:none}}
+/* ===== Interfaz: heurísticas de Nielsen ===== */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* barra fija: estado del sistema + control + búsqueda */
+.appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-bottom:6px}
+.bar-row{display:flex;align-items:center;gap:10px 14px;padding-block:10px;flex-wrap:wrap}
+.home-btn{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-weight:700;font-size:.92rem;color:var(--panel);background:var(--ink);padding:8px 14px;border-radius:999px;flex:none}
+.home-btn:hover{background:var(--foam)}
+.crumb{flex:1 1 200px;min-width:0;display:grid;line-height:1.25}
+.crumb-path{font-size:.92rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crumb-path span{color:var(--muted);font-weight:400}
+.crumb-step{font-size:.78rem;color:var(--muted)}
+.search{position:relative;flex:0 1 340px;min-width:0;display:flex;align-items:center}
+.search input{width:100%;font:inherit;font-size:.95rem;padding:9px 38px 9px 38px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink)}
+.search input:focus{outline:none;border-color:var(--foam);box-shadow:0 0 0 3px var(--foam-soft)}
+.s-ico{position:absolute;left:13px;color:var(--muted);pointer-events:none}
+.s-key{position:absolute;right:12px;font-family:var(--body);font-size:.72rem;border:1px solid var(--line);border-radius:5px;padding:0 6px;color:var(--muted);background:var(--bg)}
+.search input:focus ~ .s-key,.search input:not(:placeholder-shown) ~ .s-key{display:none}
+@media (max-width:640px){.search{flex:1 1 100%;order:3}.s-key{display:none}}
+.results{position:absolute;top:calc(100% + 8px);right:0;width:min(560px,calc(100vw - 32px));max-height:min(65vh,520px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 40px rgba(30,20,10,.18);padding:8px;z-index:30}
+@media (max-width:640px){.results{left:0;right:0;width:auto}}
+.results-head{font-size:.78rem;color:var(--muted);padding:6px 10px 8px}
+.results button{all:unset;box-sizing:border-box;display:grid;gap:2px;width:100%;padding:10px 12px;border-radius:10px;cursor:pointer}
+.results button:hover,.results button[aria-selected="true"]{background:var(--bg)}
+.results button:focus-visible{outline:2px solid var(--foam)}
+.r-title{font-weight:700;font-size:.95rem}
+.r-where{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.r-snip{font-size:.86rem;color:var(--muted);line-height:1.4}
+.results mark{background:var(--foam-soft);color:var(--ink);border-radius:3px;padding:0 2px}
+.noresults{padding:12px;display:grid;gap:10px;font-size:.92rem}
+.sugg{display:flex;flex-wrap:wrap;gap:6px}
+.sugg button{all:unset;cursor:pointer;font-size:.85rem;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--bg)}
+.sugg button:hover,.sugg button:focus-visible{border-color:var(--foam);color:var(--foam)}
+
+/* menú de temas dentro de la barra */
+.appbar nav.toc{position:static;background:none;backdrop-filter:none;border:0;margin:0;padding-block:0 10px}
+.appbar nav.toc a{display:inline-flex;align-items:center;gap:7px}
+.appbar nav.toc a::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c,var(--muted));flex:none}
+.appbar nav.toc a[aria-current="page"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.c-wood{--c:var(--coffee)}.c-steel{--c:var(--steel)}.c-stone{--c:var(--stone)}.c-water{--c:var(--water)}.c-grass{--c:var(--grass)}.c-foam{--c:var(--foam)}.c-warn{--c:var(--warn)}.c-plain{--c:var(--muted)}
+
+/* ayuda y leyenda en la portada */
+.howto{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 22px;display:grid;gap:14px}
+.howto h3{font-size:1.2rem}
+.steps3{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px;counter-reset:s}
+.steps3 li{counter-increment:s;display:grid;grid-template-columns:34px 1fr;gap:10px;font-size:.94rem;align-items:start}
+.steps3 li::before{content:counter(s);width:30px;height:30px;border-radius:50%;background:var(--foam-soft);color:var(--foam);display:grid;place-items:center;font-family:var(--display);font-weight:600}
+.kbdish,kbd{font-family:var(--body);font-size:.82em;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 6px;background:var(--bg);white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:.85rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:12px}
+.legend > span{display:inline-flex;align-items:center;gap:7px}
+.lg{width:12px;height:12px;border-radius:50%;display:inline-block}
+.lg-wood{background:var(--coffee)}.lg-steel{background:var(--steel)}.lg-stone{background:var(--stone)}
+.lg-dots{color:var(--foam);letter-spacing:.1em;font-weight:400}
+.ok-demo{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 9px;border-radius:999px;background:var(--water-soft);color:var(--water)}
+
+/* en esta página */
+.onpage{display:grid;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.onpage-t{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.onpage-list{display:flex;flex-wrap:wrap;gap:6px}
+.onpage-list button{all:unset;cursor:pointer;font-size:.86rem;padding:5px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
+.onpage-list button:hover,.onpage-list button:focus-visible{border-color:var(--foam);color:var(--foam)}
+
+/* destino de salto o búsqueda */
+.v,.card,.trick,.base,.mat-group dt,.finish > div,.best-box,.prec-box,.il,.yt{scroll-margin-top:170px}
+.flash{animation:flash 1.8s ease-out}
+@keyframes flash{0%,30%{box-shadow:0 0 0 4px var(--foam)}100%{box-shadow:0 0 0 0 transparent}}
+@media (prefers-reduced-motion:reduce){.flash{animation:none;outline:3px solid var(--foam)}}
+
+/* volver arriba */
+.totop{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:25;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;text-decoration:none;font-size:1.2rem;font-weight:700;background:var(--ink);color:var(--panel);box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.totop:hover{background:var(--foam)}
+
+/* canales de youtube */
+.ytgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:16px}
+.yt{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:8px;align-content:start;min-width:0}
+.yt-top{display:flex;align-items:center;gap:12px}
+.yt-av{width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:600;font-size:1.1rem;color:var(--panel);background:var(--yc,var(--foam))}
+.yt h3{font-size:1.1rem}
+.yt-tags{display:flex;flex-wrap:wrap;gap:6px}
+.yt p{font-size:.93rem;color:var(--muted)}
+.yt a.yt-go{justify-self:start;display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;font-size:.88rem;color:var(--foam);padding:6px 14px;border-radius:999px;border:1.5px solid var(--foam);margin-top:4px}
+.yt a.yt-go:hover{background:var(--foam);color:var(--panel)}
+.yt-group{font-size:1.05rem;font-family:var(--body);font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:10px}
+
+.totop[hidden],.results[hidden],.pager[hidden]{display:none}
+.swatches{gap:30px 26px}
+.sw span{white-space:normal;width:84px;line-height:1.05}
+.elem.resin{--el:var(--water);--el-soft:var(--water-soft)}
+.rs-list{margin:0;padding-left:1.2em;display:grid;gap:7px;font-size:.95rem}
+.rs-list li::marker{content:"✓  ";color:var(--grass)}
+.rs-no li::marker{content:"✕  ";color:var(--warn)}
+.rs-steps{grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.rs-steps p{font-size:.93rem;color:var(--muted)}
+.rust-intro{max-width:72ch;color:var(--muted)}
+.rust .best-box ol{margin:0;padding-left:1.3em;display:grid;gap:6px;font-size:.94rem}
+.rust-tag{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--steel)}
+.rust-note{font-size:.88rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+a.xref{color:var(--foam);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;text-decoration-thickness:1.5px}
+a.xref:hover{text-decoration-style:solid}
+a.xref.auto::after{content:" ↗";font-size:.75em;opacity:.7}
+.sources ol{margin:0;padding-left:1.3em;display:grid;gap:6px;font-size:.93rem;color:var(--muted)}
+footer{padding-block:40px 0;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);margin-top:48px;display:grid;gap:6px}
+footer::before{content:"Hecho a mano, con prueba y error.";font-family:var(--hand);font-size:1.5rem;color:var(--foam)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+
+<div class="wrap">
+<div class="masthead">
+  <p class="mast-topic">Bitácora de técnicas manuales de modelismo y texturizado de materiales</p>
+  <div class="mast-author">
+    <span class="mast-name">MDICD Martha Susana Cortés Romero</span>
+    <a class="mast-ig" href="https://www.instagram.com/m.susana.cortes.r/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor"/></svg>@m.susana.cortes.r</a>
+  </div>
+</div>
+<div class="appbar" id="appbar">
+  <div class="bar-row">
+    <a class="home-btn" href="#inicio" aria-label="Ir al menú de entrada"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Inicio</span></a>
+    <div class="crumb" id="crumb" aria-live="polite"><span class="crumb-path">Menú de entrada</span></div>
+    <div class="search" role="search">
+      <svg class="s-ico" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <label for="q" class="sr">Buscar en el taller</label>
+      <input id="q" type="search" placeholder="Buscar: óxido, mármol, borra…" autocomplete="off" role="combobox" aria-controls="results" aria-expanded="false" aria-autocomplete="list">
+      <kbd class="s-key" aria-hidden="true">/</kbd>
+      <div class="results" id="results" role="listbox" aria-label="Resultados de búsqueda" hidden></div>
+    </div>
+  </div>
+  <nav class="toc" aria-label="Temas">
+    <ul>
+      <li><a class="c-stone" href="#base">Preparar la base</a></li>
+      <li><a class="c-wood" href="#materiales">Materiales libres</a></li>
+      <li><a class="c-wood" href="#madera">Madera</a></li>
+      <li><a class="c-steel" href="#metal">Metal</a></li>
+      <li><a class="c-stone" href="#piedra">Piedra</a></li>
+      <li><a class="c-water" href="#ilusiones">Agua, pasto y metal falsos</a></li>
+      <li><a class="c-foam" href="#recetas">Masillas y pastas</a></li>
+      <li><a class="c-foam" href="#espumas">Espumas</a></li>
+      <li><a class="c-water" href="#resinas">Resinas</a></li>
+      <li><a class="c-grass" href="#comparar">¿Cuál uso?</a></li>
+      <li><a class="c-steel" href="#acabado">Pintura y acabado</a></li>
+      <li><a class="c-warn" href="#seguridad">Seguridad y precauciones</a></li>
+      <li><a class="c-foam" href="#canales">Canales de YouTube</a></li>
+      <li><a class="c-plain" href="#fuentes">Fuentes</a></li>
+    </ul>
+  </nav>
+</div>
+
+<header>
+  <span class="tag"><i></i>DVUE · CUAAD, Universidad de Guadalajara</span>
+  <h1>Taller de texturas <em>para utilería y escenografía</em></h1>
+  <p class="lede">Recetas, materiales y técnicas de modelismo para darle piel a tus caras de PVC espumado y estireno. Prueba siempre en un recorte antes de tocar la pieza final.</p>
+  <div class="brief">
+    <span class="label">El reto</span>
+    <p>Representa <b>madera</b>, <b>metal</b> y <b>piedra</b> en la versión que tú elijas: nueva, vieja, quemada, oxidada, pulida, en ruinas. Puedes usar cualquier material de esta página o combinarlos. Lo que se evalúa es qué tan creíble se ve a distancia de escena.</p>
+  </div>
+  <div class="swatches" aria-hidden="true">
+    <div class="sw pvc"><span>PVC espumado</span></div>
+    <div class="sw est"><span>Estireno</span></div>
+    <div class="sw cafe"><span>Borra</span></div>
+    <div class="sw mache"><span>Maché</span></div>
+    <div class="sw xps"><span>Pink foam</span></div>
+    <div class="sw yeso"><span>Pasta ligera</span></div>
+  </div>
+</header>
+
+<div class="home" id="inicio">
+  <div class="home-head">
+    <span class="label">Menú de entrada</span>
+    <h2>¿Por dónde quieres empezar?</h2>
+    <p>Elige un tema o busca lo que necesitas. Cada tema abre su propia página.</p>
+  </div>
+
+  <div class="howto" aria-labelledby="howto-t">
+    <h3 id="howto-t">Cómo usar este taller</h3>
+    <ol class="steps3">
+      <li><span><b>Elige un tema</b> en las tarjetas de abajo. Siempre puedes volver con el botón <span class="kbdish">Inicio</span>.</span></li>
+      <li><span><b>Busca una palabra</b> en la barra de arriba (óxido, mármol, pasto…). En computadora, presiona <kbd>/</kbd> para escribir.</span></li>
+      <li><span><b>Dentro de un tema</b>, usa "En esta página" para saltar a una ficha, y Anterior / Siguiente para avanzar.</span></li>
+    </ol>
+    <div class="legend" aria-label="Claves de lectura">
+      <span><i class="lg lg-wood"></i>Madera</span>
+      <span><i class="lg lg-steel"></i>Metal</span>
+      <span><i class="lg lg-stone"></i>Piedra</span>
+      <span><b class="lg-dots">●●●</b> mejor · <b class="lg-dots">●○○</b> menos</span>
+      <span><span class="ok-demo">vertical y horizontal</span> sirve en las caras laterales del cubo</span>
+    </div>
+  </div>
+
+  <h3 class="home-group">Las tres materias del reto</h3>
+  <div class="tiles tiles-big">
+    <a class="tile t-wood" href="#madera"><span class="t-sym">Ma</span><span class="t-body"><b>Madera</b><span>Nueva, vieja, quemada, pintada, corteza, dorada…</span><em>10 versiones</em></span></a>
+    <a class="tile t-steel" href="#metal"><span class="t-sym">Fe</span><span class="t-body"><b>Metal</b><span>Oxidado, óxido real, forjado, cobre con pátina, oro…</span><em>10 versiones + óxido real</em></span></a>
+    <a class="tile t-stone" href="#piedra"><span class="t-sym">Pi</span><span class="t-body"><b>Piedra</b><span>Mármol, granito, cantera, tezontle, ruina…</span><em>10 versiones</em></span></a>
+  </div>
+
+  <h3 class="home-group">Recetario y trucos</h3>
+  <div class="tiles">
+    <a class="tile t-foam" href="#recetas"><span class="t-sym">Re</span><span class="t-body"><b>Masillas y pastas</b><span>Borra de café, papel maché, pasta francesa y japonesa, pastas ligeras</span></span></a>
+    <a class="tile t-foam" href="#espumas"><span class="t-sym">Es</span><span class="t-body"><b>Espumas</b><span>Pink foam, foam clay y foami</span></span></a>
+    <a class="tile t-water" href="#resinas"><span class="t-sym">Rs</span><span class="t-body"><b>Resinas</b><span>Cuándo conviene, tipos y cómo usarlas</span></span></a>
+    <a class="tile t-water" href="#ilusiones"><span class="t-sym">Il</span><span class="t-body"><b>Agua, pasto y metal falsos</b><span>Lo que parece y no es</span></span></a>
+  </div>
+
+  <h3 class="home-group">Antes y después de texturizar</h3>
+  <div class="tiles">
+    <a class="tile t-stone" href="#base"><span class="t-sym">1</span><span class="t-body"><b>Preparar la base</b><span>PVC espumado y estireno: lijar, imprimar, grabar</span></span></a>
+    <a class="tile t-wood" href="#materiales"><span class="t-sym">Al</span><span class="t-body"><b>Materiales libres</b><span>Pegamentos, cargas, herramientas y acabados</span></span></a>
+    <a class="tile t-steel" href="#acabado"><span class="t-sym">Pt</span><span class="t-body"><b>Pintura y acabado</b><span>Sellar, base oscura, pincel seco, lavados</span></span></a>
+  </div>
+
+  <h3 class="home-group">Decidir y cuidarte</h3>
+  <div class="tiles">
+    <a class="tile t-grass" href="#comparar"><span class="t-sym">?</span><span class="t-body"><b>¿Cuál uso?</b><span>Comparativo y lo más resistente en PVC y estireno</span></span></a>
+    <a class="tile t-warn" href="#seguridad"><span class="t-sym">!</span><span class="t-body"><b>Seguridad y precauciones</b><span>Taller, PVC espumado y estireno</span></span></a>
+  </div>
+
+  <h3 class="home-group">Para seguir aprendiendo</h3>
+  <div class="tiles">
+    <a class="tile t-foam" href="#canales"><span class="t-sym">▶</span><span class="t-body"><b>Canales de YouTube</b><span>Modelistas, prop makers y escenografía</span><em>14 canales</em></span></a>
+    <a class="tile t-plain" href="#fuentes"><span class="t-sym">Fu</span><span class="t-body"><b>Fuentes</b><span>Para profundizar en cada técnica</span></span></a>
+  </div>
+</div>
+
+
+
+<!-- 1 BASE -->
+<section id="base">
+  <div class="sec-head">
+    <span class="label">Antes de empezar</span>
+    <h2>Preparar la base</h2>
+    <p>Las masillas no se agarran bien a un plástico liso. Tu primer trabajo es darle "diente" a la superficie y saber qué aguanta cada material.</p>
+  </div>
+  <div class="grid2">
+    <div class="base">
+      <h3>PVC espumado (tipo Sintra / Foamex)</h3>
+      <ul>
+        <li>Es blando: lo puedes rayar con punzón, lápiz sin punta o desarmador plano para grabar ladrillos, tablas o grietas.</li>
+        <li>Se ablanda alrededor de 65&nbsp;°C. Puedes curvarlo con pistola de calor o metiendo piezas chicas en agua hirviendo, siempre con ventilación.</li>
+        <li>Nunca lo cortes con cautín, alambre caliente, láser ni flama. Al quemarse libera gases ácidos.</li>
+        <li>Lija suave (120–220) antes de aplicar masilla y quita el polvo con trapo húmedo.</li>
+      </ul>
+    </div>
+    <div class="base">
+      <h3>Estireno (placa de poliestireno)</h3>
+      <ul>
+        <li>Es más duro que el PVC espumado: los grabados quedan poco profundos, así que marca con más presión o con regla y punta.</li>
+        <li>Para veta de madera, arrastra una sierra de dientes finos a lo largo de la "tabla". Una pasada firme con lija muy gruesa también funciona.</li>
+        <li>Se pega con cemento para plásticos o con cianoacrilato (kola loka).</li>
+        <li>Venden placas ya grabadas (ladrillo, adoquín, tablas). Sirven como referencia o para una cara completa.</li>
+      </ul>
+    </div>
+    <div class="base">
+      <h3>Imprimación que ayuda a pegar</h3>
+      <ul>
+        <li>Lija, limpia y pasa una mano de Resistol 850 rebajado con agua (1:1). Déjalo secar antes de la masilla.</li>
+        <li>Para capas gruesas, haz rayas cruzadas con cúter sobre el plástico: la masilla se "ancla".</li>
+        <li>Trabaja en capas delgadas (2–4&nbsp;mm). Las capas gruesas tardan días y se cuartean.</li>
+        <li>El resistol encoge al secar y puede pandear láminas delgadas. En este caso estamos usando PVC espumado de 6&nbsp;mm, así que no hay problema. Si alguien usa estireno delgado y la cara se curva, que aplique una capa de sellador también por detrás.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- MATERIALES LIBRES -->
+<section id="materiales">
+  <div class="sec-head">
+    <span class="label">Almacén</span>
+    <h2>Materiales libres</h2>
+    <p>Todo esto se vale. La mayoría se consigue en papelería, ferretería, tlapalería o en la cocina de tu casa. Revisa la columna "sirve para" y combina.</p>
+  </div>
+  <div class="mats">
+    <div class="mat-group">
+      <h3>Pegamentos y selladores</h3>
+      <dl>
+        <dt>Resistol 850 (cola blanca)</dt><dd>Pegar cargas, sellar rebajado 1:1, base de casi todas las masillas.</dd>
+        <dt>Mod Podge</dt><dd>Sellar espumas y papel; mezclado con acrílico negro es base y protección.</dd>
+        <dt>Silicón caliente</dt><dd>Hacer veta, nudos, gotas de soldadura, cordones de remache y escurrimientos.</dd>
+        <dt>Silicón frío</dt><dd>Pegar espumas al plástico sin derretirlas.</dd>
+        <dt>Kola Loka / cianoacrilato</dt><dd>Pegar estireno, piedritas y piezas chicas al instante.</dd>
+        <dt>Cemento para plásticos</dt><dd>Unir estireno; aplicado con pincel ablanda la superficie y deja textura.</dd>
+        <dt>Masilla epóxica</dt><dd>Esculpir remaches, bisagras y adornos muy duros.</dd>
+      </dl>
+    </div>
+    <div class="mat-group">
+      <h3>Cargas y granos</h3>
+      <dl>
+        <dt>Borra de café seca</dt><dd>Tierra, óxido, piedra volcánica, madera podrida.</dd>
+        <dt>Aserrín</dt><dd>Con resistol: madera aglomerada, corteza, superficie de tablas viejas.</dd>
+        <dt>Arena fina y de río</dt><dd>Granito, cantera, concreto, suelo.</dd>
+        <dt>Bicarbonato</dt><dd>Grano muy fino para óxido y concreto; con kola loka endurece al instante.</dd>
+        <dt>Yeso y cal</dt><dd>Estuco, piedra caliza, concreto.</dd>
+        <dt>Pasta para juntas (tablaroca)</dt><dd>Pasta de textura, aplanados, base de masillas.</dd>
+        <dt>Sal de mesa o de grano</dt><dd>Reservar zonas al pintar: desgaste y óxido.</dd>
+        <dt>Cascarón de huevo</dt><dd>Mosaico de piedra quebrada, grietas, piel de muro viejo.</dd>
+        <dt>Té y café líquidos</dt><dd>Teñir madera real, papel y aserrín.</dd>
+      </dl>
+    </div>
+    <div class="mat-group">
+      <h3>Estructura y superficie</h3>
+      <dl>
+        <dt>Cartón corrugado</dt><dd>Sin una de sus caras: lámina acanalada de metal.</dd>
+        <dt>Cartón gris o caple</dt><dd>Placas, tablones, lajas de pizarra (rasgado en capas).</dd>
+        <dt>Abatelenguas, palitos, palillos</dt><dd>Duelas, vigas, cercas, tablas de verdad.</dd>
+        <dt>Chapa de madera</dt><dd>Lámina real de madera muy delgada; se pega como papel.</dd>
+        <dt>Papel aluminio</dt><dd>Repujado, metal martillado; arrugado sirve como sello de roca.</dd>
+        <dt>Tela manta y gasa con resistol</dt><dd>Endurece y da piel a rocas, troncos y vendas.</dd>
+        <dt>Malla de mosquitero</dt><dd>Rejilla metálica, celosía, sello de textura.</dd>
+        <dt>Piedras reales chicas</dt><dd>Grava, piedra de pecera, piedra de río para empedrado.</dd>
+        <dt>Cartón de huevo</dt><dd>Desmenuzado y con resistol, roca orgánica muy barata.</dd>
+      </dl>
+    </div>
+    <div class="mat-group">
+      <h3>Herramientas de textura</h3>
+      <dl>
+        <dt>Esponja natural y de trastes</dt><dd>Puntear granito, óxido, poro de piedra.</dd>
+        <dt>Cepillo de alambre</dt><dd>Veta de madera, metal cepillado, piedra gastada.</dd>
+        <dt>Cepillo de dientes</dt><dd>Salpicar pintura: granito, mármol, manchas.</dd>
+        <dt>Peine o tenedor</dt><dd>Veta pintada o veta en masilla fresca.</dd>
+        <dt>Punzón, lápiz sin punta, palillo</dt><dd>Grabar juntas, clavos, grietas, agujeros de polilla.</dd>
+        <dt>Plumas de ave</dt><dd>Pintar las vetas del mármol.</dd>
+        <dt>Bolita de unicel o de aluminio</dt><dd>Martillado y poros.</dd>
+        <dt>Pistola de calor</dt><dd>Texturar foami y pink foam, curvar PVC con ventilación.</dd>
+        <dt>Lija gruesa y fina</dt><dd>Desgaste de bordes, rayado direccional, pulido.</dd>
+      </dl>
+    </div>
+    <div class="mat-group">
+      <h3>Color y acabado</h3>
+      <dl>
+        <dt>Acrílicos y vinílica</dt><dd>Base, veladuras, pincel seco.</dd>
+        <dt>Gesso</dt><dd>Imprimación blanca o negra que agarra en casi todo.</dd>
+        <dt>Pintura metálica</dt><dd>Plata, oro, cobre y bronce para luces.</dd>
+        <dt>Hoja de oro de imitación</dt><dd>Dorado tipo retablo; se pega con resistol tacky o mixtión.</dd>
+        <dt>Grafito en polvo o lápiz 8B</dt><dd>Brillo de hierro sobre negro mate.</dd>
+        <dt>Betún de calzado negro o café</dt><dd>Envejecer repujado, madera y metal; se frota y se limpia.</dd>
+        <dt>Cera para muebles</dt><dd>Brillo suave en madera pulida y mármol.</dd>
+        <dt>Laca para el cabello</dt><dd>Capa intermedia para despostillar pintura con agua.</dd>
+        <dt>Gises pastel raspados</dt><dd>Polvo de óxido, hollín y tierra.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- MADERA -->
+<section id="madera" class="elem wood">
+  <div class="elem-head">
+    <span class="elem-sym" aria-hidden="true">Ma</span>
+    <div class="sec-head">
+      <span class="label">Materia 1 de 3</span>
+      <h2>Madera, todas sus versiones</h2>
+      <p>La madera se lee por tres cosas: veta en una dirección, juntas entre tablas y desgaste en las orillas. Si tienes esas tres, el material se cree.</p>
+    </div>
+  </div>
+  <div class="vgrid">
+    <article class="v">
+      <div class="v-top"><h3>Nueva o barnizada</h3><div class="pal"><i style="--c:#C79A63"></i><i style="--c:#8A5A32"></i><i style="--c:#4E2E17"></i></div></div>
+      <p class="look">Pino, encino, caoba o nogal recién trabajados.</p>
+      <p class="v-mat"><b>Materiales:</b> pintura base color madera, veladura café (acrílico + agua + un poco de resistol), peine o brocha seca.</p>
+      <ol><li>Base del tono de la especie: pino beige claro, encino café medio, caoba café rojizo, nogal café oscuro.</li><li>Pasa la veladura por secciones chicas.</li><li>Jala el peine en un solo movimiento, siempre a lo largo. Para maderas finas usa brocha seca.</li><li>Haz nudos girando la esquina del peine y suaviza los bordes.</li><li>Termina con barniz o cera para dar brillo.</li></ol>
+      <p class="tipline">Mientras la veladura está fresca, si te equivocas, limpias y repites.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Vieja a la intemperie</h3><div class="pal"><i style="--c:#3A332D"></i><i style="--c:#7D766D"></i><i style="--c:#B9B2A6"></i></div></div>
+      <p class="look">Cerca de rancho, muelle, granero: gris plata, grietas abiertas.</p>
+      <p class="v-mat"><b>Materiales:</b> estireno o pink foam, sierra o cepillo de alambre, acrílicos.</p>
+      <ol><li>Graba la veta profunda y marca grietas que sigan la veta.</li><li>Base café muy oscuro, metido en todas las ranuras.</li><li>Pincel seco gris medio, luego gris casi blanco solo en lo más alto.</li><li>Lavado café diluido en la parte baja de la tabla, donde salpica la tierra.</li></ol>
+      <p class="tipline">Redondea las esquinas con lija: la madera vieja nunca tiene filos.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Quemada</h3><div class="pal"><i style="--c:#0E0D0C"></i><i style="--c:#3B2A20"></i><i style="--c:#B2572A"></i></div></div>
+      <p class="look">Estilo shou sugi ban, viga después de un incendio, leña carbonizada.</p>
+      <p class="v-mat"><b>Materiales:</b> pink foam o masilla de maché, cepillo de alambre, acrílico negro, naranja y café.</p>
+      <ol><li>En espuma, marca grietas en cuadrícula irregular (piel de cocodrilo) con punzón.</li><li>Pinta todo negro mate.</li><li>Pincel seco café oscuro en las crestas.</li><li>Toques muy chicos de naranja quemado dentro de alguna grieta: parece brasa.</li><li>Opcional: grafito frotado para el brillo del carbón.</li></ol>
+      <p class="tipline">No quemes el material real. El PVC y las espumas sueltan humo tóxico.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Pintada y descarapelada</h3><div class="pal"><i style="--c:#5C3A22"></i><i style="--c:#2F6F73"></i><i style="--c:#E7E1D3"></i></div></div>
+      <p class="look">Puerta de pueblo, banca de parque, ventana colonial.</p>
+      <p class="v-mat"><b>Materiales:</b> madera pintada (técnica de arriba), laca para el cabello o sal, pintura de color, agua y cepillo.</p>
+      <ol><li>Haz primero la madera completa y deja secar.</li><li>Rocía dos o tres capas finas de laca, o moja zonas con pincel y pega sal.</li><li>Pinta encima el color de la puerta.</li><li>Cuando seque al tacto, moja y talla con cepillo duro: la pintura se levanta y aparece la madera.</li></ol>
+      <p class="tipline">Concentra el desgaste donde se toca: chapas, orillas, parte baja.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Corteza y tronco</h3><div class="pal"><i style="--c:#2B241E"></i><i style="--c:#5E4F40"></i><i style="--c:#9A8B76"></i></div></div>
+      <p class="look">Árbol, poste rústico, leño.</p>
+      <p class="v-mat"><b>Materiales:</b> masilla de maché o de borra, tenedor, palillo, silicón caliente.</p>
+      <ol><li>Unta masilla de 3–5&nbsp;mm.</li><li>Peina en vertical con tenedor, con trazos que se abren y se juntan.</li><li>Marca grietas largas con palillo.</li><li>Base oscura, pincel seco gris cálido, verde en la parte baja.</li></ol>
+      <p class="tipline">Hilos de silicón caliente bajo la masilla dan las venas gruesas de la corteza.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Tablas, duelas y vigas</h3><div class="pal"><i style="--c:#A0703F"></i><i style="--c:#6E4A2A"></i><i style="--c:#2E2015"></i></div></div>
+      <p class="look">Piso de duela, techo de vigas, tarima.</p>
+      <p class="v-mat"><b>Materiales:</b> abatelenguas o chapa de madera real, café o té, kola loka.</p>
+      <ol><li>Tiñe los palitos sumergiéndolos en café o té fuerte; varía el tiempo para tener tonos distintos.</li><li>Pégalos alternando tonos y largos, con juntas desfasadas como en un piso real.</li><li>Marca clavos con punzón en los extremos.</li><li>Lavado oscuro en las juntas.</li></ol>
+      <p class="tipline">Es madera real: es el camino más rápido a un resultado creíble.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Triplay y aglomerado</h3><div class="pal"><i style="--c:#D7B98A"></i><i style="--c:#A9845A"></i><i style="--c:#6F5538"></i></div></div>
+      <p class="look">Cajas de bodega, obra negra, tarimas industriales.</p>
+      <p class="v-mat"><b>Materiales:</b> aserrín, resistol, cartón gris en capas.</p>
+      <ol><li>Aglomerado: aserrín revuelto con resistol, extendido y aplanado con espátula.</li><li>Triplay: pega 3 a 5 capas de cartón y deja ver el canto con capas alternas claras y oscuras.</li><li>Tinta clara en la cara y una veta muy tenue.</li><li>Estampa letras o números de bodega con esténcil.</li></ol>
+      <p class="tipline">El canto en capas es el detalle que vende el triplay.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Podrida o carcomida</h3><div class="pal"><i style="--c:#2A2620"></i><i style="--c:#5B6B3A"></i><i style="--c:#8C7A5E"></i></div></div>
+      <p class="look">Barco hundido, casa abandonada, madera húmeda.</p>
+      <p class="v-mat"><b>Materiales:</b> masilla de borra, punzón, pigmento verde, Mod Podge brillante.</p>
+      <ol><li>Rompe las orillas a mano: deben verse fibrosas, no cortadas.</li><li>Pica agujeros de polilla con punzón fino.</li><li>Base negra, pincel seco café, manchas verde musgo.</li><li>Un toque brillante en zonas bajas simula humedad.</li></ol>
+      <p class="tipline">Mezcla borra en la base de la tabla para que parezca que se deshace.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Tallada o dorada</h3><div class="pal"><i style="--c:#7A1F17"></i><i style="--c:#B8892F"></i><i style="--c:#E6C66A"></i></div></div>
+      <p class="look">Retablo barroco, marco antiguo, mueble de época.</p>
+      <p class="v-mat"><b>Materiales:</b> pasta francesa o foam clay, moldes de silicón, hoja de oro de imitación, betún.</p>
+      <ol><li>Saca ornamentos en molde y pégalos sobre la cara.</li><li>Base rojo óxido (como el bol de los doradores).</li><li>Pega hoja de oro o pinta dorado.</li><li>Frota un poco de betún café y limpia: queda oscuro en los huecos y brillante en el relieve.</li></ol>
+      <p class="tipline">Deja asomar el rojo en algunos filos para que se vea antiguo.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Bambú y carrizo</h3><div class="pal"><i style="--c:#C7B36F"></i><i style="--c:#8F8243"></i><i style="--c:#4B4526"></i></div></div>
+      <p class="look">Celosía, cerca oriental, choza.</p>
+      <p class="v-mat"><b>Materiales:</b> popotes de papel, brochetas o palitos redondos, silicón caliente.</p>
+      <ol><li>Corta brochetas o popotes a lo largo por la mitad y pégalos planos.</li><li>Marca los nudos con un anillo de silicón caliente cada 4–6&nbsp;cm.</li><li>Base amarillo verdoso, lavado café en los nudos.</li><li>Amárralos con hilo de yute en cruz.</li></ol>
+      <p class="tipline">Alterna la altura de los nudos: en la naturaleza no coinciden.</p>
+    </article>
+  </div>
+</section>
+
+<!-- METAL -->
+<section id="metal" class="elem steel">
+  <div class="elem-head">
+    <span class="elem-sym" aria-hidden="true">Fe</span>
+    <div class="sec-head">
+      <span class="label">Materia 2 de 3</span>
+      <h2>Metal, todas sus versiones</h2>
+      <p>El metal se lee por el contraste: brillo fuerte en filos y relieves, oscuro en huecos. Empieza casi siempre con base negra.</p>
+    </div>
+  </div>
+  <div class="vgrid">
+    <article class="v">
+      <div class="v-top"><h3>Hierro oxidado con despostillado</h3><div class="pal"><i style="--c:#5A2414"></i><i style="--c:#A3471F"></i><i style="--c:#3F5446"></i></div></div>
+      <p class="look">Tambo, puerta de bodega, maquinaria abandonada.</p>
+      <p class="v-mat"><b>Materiales:</b> acrílicos rojo óxido y naranja, laca para el cabello, sal, pintura de color, agua, cepillo.</p>
+      <ol><li>Base rojo óxido, con esponja aplica manchas desparejas de ladrillo y café.</li><li>Tres capas finas de laca, dejando secar entre cada una.</li><li>Para óxido fuerte, espolvorea sal sobre la laca aún húmeda.</li><li>Pinta encima el color (verde militar, azul, blanco).</li><li>Moja y talla con cepillo duro o palillo: la pintura se levanta y aparece el óxido. Retira la sal.</li></ol>
+      <p class="tipline">Repite el tallado hasta lograr el nivel de desgaste que quieres.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Óxido pesado con costra</h3><div class="pal"><i style="--c:#3A1B10"></i><i style="--c:#8E3B17"></i><i style="--c:#D07A2E"></i></div></div>
+      <p class="look">Ancla, cadena de barco, lámina carcomida.</p>
+      <p class="v-mat"><b>Materiales:</b> masilla de borra o bicarbonato con resistol, gises pastel naranja raspados.</p>
+      <ol><li>Unta parches de masilla de borra, más gruesos en orillas y uniones.</li><li>Pinta café muy oscuro.</li><li>Puntea con esponja rojo óxido y luego naranja, menos cantidad cada vez.</li><li>Espolvorea gis pastel naranja en polvo y fíjalo con resistol rebajado en aspersor.</li></ol>
+      <p class="tipline">El óxido escurre hacia abajo: haz líneas verticales desde tornillos y bordes.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Hierro forjado y acero oscuro</h3><div class="pal"><i style="--c:#141517"></i><i style="--c:#3B3E43"></i><i style="--c:#8C9097"></i></div></div>
+      <p class="look">Reja colonial, candelabro, armadura, sartén.</p>
+      <p class="v-mat"><b>Materiales:</b> negro mate, grafito en polvo o lápiz 8B, trapo suave, barniz mate.</p>
+      <ol><li>Pinta negro mate y deja secar apenas al tacto.</li><li>Con trapo, cotonete o dedo frota muy poco grafito. Más frotado = más brillo.</li><li>Pincel seco plata solo en filos muy expuestos.</li><li>Sella con barniz en capas finas para no dejar huellas.</li></ol>
+      <p class="tipline">El grafito no agarra en pintura brillante. Usa cubrebocas: el polvo vuela.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Acero inoxidable y aluminio cepillado</h3><div class="pal"><i style="--c:#5F646B"></i><i style="--c:#A9AEB5"></i><i style="--c:#E2E5E9"></i></div></div>
+      <p class="look">Cocina industrial, nave espacial, elevador.</p>
+      <p class="v-mat"><b>Materiales:</b> pintura plata, lija fina 400–600, papel aluminio, cinta masking.</p>
+      <ol><li>Base gris oscuro, luego plata en capas finas.</li><li>Con lija fina pasa siempre en la misma dirección: aparecen rayitas como metal cepillado.</li><li>Alternativa: pega papel aluminio por el lado mate con resistol tacky y rállalo con fibra verde en una sola dirección.</li><li>Divide en paneles con cinta masking y lavado gris en las uniones.</li></ol>
+      <p class="tipline">Paneles en sentidos alternos reflejan la luz distinto, como en la vida real.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Cobre y bronce con pátina</h3><div class="pal"><i style="--c:#8A4B24"></i><i style="--c:#2E9C8E"></i><i style="--c:#7CC9B6"></i></div></div>
+      <p class="look">Estatua de plaza, campana, cúpula, fuente.</p>
+      <p class="v-mat"><b>Materiales:</b> cobre o bronce metálico, turquesa y verde esmeralda con blanco, esponja húmeda, trapo.</p>
+      <ol><li>Pinta todo cobre o bronce.</li><li>Puntea encima turquesa en tonos claros y oscuros.</li><li>Fresco todavía, retira color con esponja húmeda donde quieres que se vea el metal.</li><li>En relieves, frota con trapo las partes altas: el verde queda en los huecos.</li><li>Si quedó muy brillante, veladura de café sombra 50/50 con agua.</li></ol>
+      <p class="tipline">Haz escurrimientos verdes debajo de bordes: así cae la lluvia sobre el bronce.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Oro, latón y dorado</h3><div class="pal"><i style="--c:#5B3A12"></i><i style="--c:#B88A2E"></i><i style="--c:#F2D27A"></i></div></div>
+      <p class="look">Corona, trofeo, picaporte antiguo, marco de espejo.</p>
+      <p class="v-mat"><b>Materiales:</b> base ocre o café, dorado acrílico, hoja de oro de imitación, betún café.</p>
+      <ol><li>Base café oscuro u ocre: el dorado se ve más rico sobre fondo cálido.</li><li>Dos capas de dorado o la hoja de oro.</li><li>Betún café frotado y retirado con trapo para envejecer.</li><li>Pincel seco dorado claro o plata en lo más alto.</li></ol>
+      <p class="tipline">Latón: dorado con un poco de verde. Oro viejo: más betún.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Lámina acanalada</h3><div class="pal"><i style="--c:#4D5257"></i><i style="--c:#8B9096"></i><i style="--c:#A3471F"></i></div></div>
+      <p class="look">Techo de lámina, barda de obra, contenedor.</p>
+      <p class="v-mat"><b>Materiales:</b> cartón corrugado, agua, resistol, pintura plata y gris.</p>
+      <ol><li>Moja una cara del cartón y despega el papel liso: queda la onda expuesta.</li><li>Sella con resistol rebajado para endurecer.</li><li>Base gris oscuro, pincel seco plata a lo largo de las crestas.</li><li>Óxido en la parte baja y alrededor de los clavos.</li></ol>
+      <p class="tipline">Corta los bordes ligeramente torcidos o abollados: una lámina perfecta no se cree.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Martillado</h3><div class="pal"><i style="--c:#2A2B2E"></i><i style="--c:#6D6F73"></i><i style="--c:#C9CBCE"></i></div></div>
+      <p class="look">Cazo de cobre, escudo, puerta de herrería artesanal.</p>
+      <p class="v-mat"><b>Materiales:</b> foami grueso y pistola de calor, o papel aluminio sobre cartón, bolita de unicel o aluminio.</p>
+      <ol><li>Calienta el foami y presiona la bolita una y otra vez, solapando huellas.</li><li>Con aluminio: presiona la bolita sobre el aluminio apoyado en una superficie blanda.</li><li>Sella, base negra y pincel seco plata o cobre.</li><li>Betún o lavado negro para marcar cada golpe.</li></ol>
+      <p class="tipline">Golpes más chicos y juntos hacia las orillas, más grandes al centro.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Placas remachadas</h3><div class="pal"><i style="--c:#23262A"></i><i style="--c:#556066"></i><i style="--c:#9EA7AD"></i></div></div>
+      <p class="look">Barco, tanque, caldera, maquinaria steampunk.</p>
+      <p class="v-mat"><b>Materiales:</b> estireno delgado, bolitas de pasta francesa o gotas de silicón, regla, punzón.</p>
+      <ol><li>Corta placas de estireno y pégalas encimadas unos milímetros.</li><li>Traza una línea guía a 5&nbsp;mm del borde.</li><li>Coloca bolitas de pasta o gotas de silicón a distancia regular.</li><li>Pinta, lavado negro alrededor de cada remache, óxido escurriendo de algunos.</li></ol>
+      <p class="tipline">Mide la distancia entre remaches. La repetición exacta es lo que lo hace industrial.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Repujado</h3><div class="pal"><i style="--c:#151515"></i><i style="--c:#7E8085"></i><i style="--c:#D8D9DB"></i></div></div>
+      <p class="look">Placa decorativa, espejo de hojalata mexicana, armadura grabada.</p>
+      <p class="v-mat"><b>Materiales:</b> papel aluminio grueso o lata de aluminio, hilo o cartón recortado, resistol, betún negro.</p>
+      <ol><li>Pega sobre la cara el dibujo en relieve con cordón o cartón recortado.</li><li>Cubre con aluminio pegado con resistol y empuja con el dedo y un palillo para que marque el dibujo.</li><li>Unta betún negro y limpia con trapo: queda negro en los huecos.</li><li>Frota los relieves con trapo seco hasta que brillen.</li></ol>
+      <p class="tipline">Para hojalata mexicana, agrega toques de color translúcido encima.</p>
+    </article>
+  </div>
+  <h3 class="yt-group" id="oxido-real-t">Óxido real (químico)</h3>
+  <p class="rust-intro">El óxido pintado se controla mejor y no usa químicos. El óxido real es hierro que de verdad se oxida: da polvo, manchas y tonos naranja imposibles de pintar, pero es menos predecible. Funciona sobre PVC espumado y estireno porque no oxidas la placa, oxidas una capa de hierro que pones encima.</p>
+  <div class="best rust">
+    <div class="best-box">
+      <h3>Método 1 · Pintura de hierro + activador</h3>
+      <p class="rust-tag">Comercial · el más confiable</p>
+      <ol>
+        <li>Lija la placa, limpia el polvo y aplica el primer del sistema (normalmente dos manos).</li>
+        <li>Da dos capas de pintura con hierro. Deja secar por completo la segunda.</li>
+        <li>Aplica el activador con esponja o atomizador; repite a los 5 minutos. Una tercera mano da un rojo más profundo.</li>
+        <li>El óxido aparece mientras seca, en 30 a 60 minutos.</li>
+        <li>Sella con el sellador que indica la misma marca.</li>
+      </ol>
+      <p class="rust-note">Se vende como "pintura reactiva de hierro" o "efecto óxido real". Algunos sustituyen el activador por vinagre para ahorrar.</p>
+    </div>
+    <div class="best-box">
+      <h3>Método 2 · Limadura de hierro casera</h3>
+      <p class="rust-tag">Experimental · haz pruebas antes</p>
+      <ol>
+        <li>Consigue limadura de hierro muy fina (en tornerías o tiendas de material didáctico de imanes).</li>
+        <li>Pinta la zona de café oscuro y, fresca, espolvorea la limadura o mézclala con resistol y úntala.</li>
+        <li>Ya seca, rocía una mezcla de vinagre blanco con agua oxigenada y una pizca de sal.</li>
+        <li>Repite el rociado cada hora hasta lograr el tono. Puede tardar de horas a un día.</li>
+        <li>Seca, limpia el residuo y sella (<a class="xref" href="#oxido-sellar">ver cómo</a>).</li>
+      </ol>
+      <p class="rust-note">Es una receta de taller: el resultado cambia según la limadura y la humedad.</p>
+    </div>
+    <div class="best-box">
+      <h3>Método 3 · Lodo de fibra de acero en vinagre</h3>
+      <p class="rust-tag">Casero · para manchas y madera</p>
+      <ol>
+        <li>Deja un trozo de fibra de acero (sin jabón) en vinagre blanco, en un frasco abierto, varios días.</li>
+        <li>Cuando el líquido se ponga turbio y aparezca lodo naranja, aplícalo con pincel sobre la masilla o la pintura.</li>
+        <li>Escurre desde tornillos y bordes para manchas de óxido muy creíbles.</li>
+        <li>En madera real (abatelenguas, chapa) el mismo líquido la envejece y la pone gris.</li>
+      </ol>
+      <p class="rust-note">Funciona mejor sobre superficies porosas, no directo sobre estireno liso.</p>
+    </div>
+    <div class="best-box" id="oxido-sellar">
+      <h3>Para que dure y no manche</h3>
+      <ul class="rs-list">
+        <li>El óxido real suelta polvo naranja que mancha manos, ropa y escenografía: <b>siempre séllalo</b> con barniz mate o el sellador del sistema.</li>
+        <li>Antes de sellar, limpia los cristales de sal y el ácido: pasa un trapo con agua y un poco de bicarbonato, y deja secar.</li>
+        <li>Usa guantes y lentes: el vinagre caliente y el agua oxigenada irritan.</li>
+        <li><b>Nunca mezcles cloro con vinagre:</b> produce gas tóxico.</li>
+        <li>Trabaja lejos de herramientas de metal que no quieras oxidar.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PIEDRA -->
+<section id="piedra" class="elem stone">
+  <div class="elem-head">
+    <span class="elem-sym" aria-hidden="true">Pi</span>
+    <div class="sec-head">
+      <span class="label">Materia 3 de 3</span>
+      <h2>Piedra, todas sus versiones</h2>
+      <p>La piedra se lee por variación: ninguna pieza igual a otra, poro y grano, y peso visual. Junta tonos de la misma familia, nunca un solo gris.</p>
+    </div>
+  </div>
+  <div class="vgrid">
+    <article class="v">
+      <div class="v-top"><h3>Mármol</h3><div class="pal"><i style="--c:#F3F2EE"></i><i style="--c:#B9BBBE"></i><i style="--c:#6E7277"></i></div></div>
+      <p class="look">Carrara blanco, columna, piso de palacio.</p>
+      <p class="v-mat"><b>Materiales:</b> base blanca satinada, tres tonos de gris aguados (3 de pintura por 1 de agua), pluma de ave, atomizador, cepillo de dientes.</p>
+      <ol><li>Arrastra la pluma en diagonal girándola: líneas que cambian de grosor.</li><li>Rocía agua desde lejos para que las vetas se difuminen.</li><li>Ya seco, vetas más delgadas y oscuras encima.</li><li>Veladura blanca muy diluida sobre todo.</li><li>Salpica blanco con cepillo de dientes. Lija fina y sella con cera o barniz.</li></ol>
+      <p class="tipline">Las vetas cruzan los bordes y continúan en el costado de la pieza.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Granito</h3><div class="pal"><i style="--c:#2C2B2B"></i><i style="--c:#8A7B70"></i><i style="--c:#E8E3DC"></i></div></div>
+      <p class="look">Monumento, cubierta, escalinata.</p>
+      <p class="v-mat"><b>Materiales:</b> base gris o rosa, esponja natural, cepillo de dientes, colores oscuro, medio y claro.</p>
+      <ol><li>Base del color general.</li><li>Puntea con esponja el tono medio, sin cubrir todo.</li><li>Salpica el oscuro con cepillo de dientes, de lejos para punto fino.</li><li>Salpica el claro al final.</li><li>Barniz brillante si es pulido.</li></ol>
+      <p class="tipline">Prueba la distancia del salpicado en papel antes: cerca da gotas grandes.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Cantera</h3><div class="pal"><i style="--c:#C99E86"></i><i style="--c:#A8826D"></i><i style="--c:#E3CCB8"></i></div></div>
+      <p class="look">Fachada tapatía, arco, fuente colonial (rosa, gris o amarilla).</p>
+      <p class="v-mat"><b>Materiales:</b> pink foam o pasta ligera con arena fina, esponja, acrílico rosa, ocre y blanco.</p>
+      <ol><li>Corta sillares en pink foam o aplica pasta ligera y marca las juntas.</li><li>Rueda una piedra real encima para el poro.</li><li>Base rosa salmón apagado, esponja ocre y blanco cálido.</li><li>Lavado café muy diluido en juntas y parte baja.</li></ol>
+      <p class="tipline">La cantera tiene grano fino y uniforme; evita las texturas muy bruscas.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Tezontle y piedra volcánica</h3><div class="pal"><i style="--c:#3D1714"></i><i style="--c:#7A2C22"></i><i style="--c:#2B2A2A"></i></div></div>
+      <p class="look">Muro del centro histórico, molcajete, roca de lava.</p>
+      <p class="v-mat"><b>Materiales:</b> masilla de borra o maché con bicarbonato, esponja de trastes, punzón.</p>
+      <ol><li>Unta la masilla y puntea con esponja dura para dejar muchos poros.</li><li>Abre algunos poros más grandes con punzón.</li><li>Base café rojizo oscuro; tezontle en rojo óxido, basalto en gris carbón.</li><li>Pincel seco muy ligero que no entre en los poros.</li></ol>
+      <p class="tipline">El poro debe quedar oscuro: si se rellena de pintura clara, pierde el efecto.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Pizarra y laja</h3><div class="pal"><i style="--c:#2A3036"></i><i style="--c:#4C5660"></i><i style="--c:#7E8A94"></i></div></div>
+      <p class="look">Techo de pizarra, muro de lajas, cueva.</p>
+      <p class="v-mat"><b>Materiales:</b> cartón gris rasgado en capas, pink foam rasgado a mano, resistol.</p>
+      <ol><li>Rasga el cartón o la espuma (no cortes) para que el borde quede en escalones.</li><li>Pega las piezas encimadas en hileras.</li><li>Sella, base gris azulado, pincel seco gris claro en los bordes.</li><li>Algunas lajas con veladura verde o café para variar.</li></ol>
+      <p class="tipline">Rasgar es la clave: el corte limpio delata el material.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Empedrado y canto rodado</h3><div class="pal"><i style="--c:#5D564E"></i><i style="--c:#958A7B"></i><i style="--c:#C7BEAF"></i></div></div>
+      <p class="look">Calle de pueblo, río, muro de piedra bola.</p>
+      <p class="v-mat"><b>Materiales:</b> piedras de río chicas reales o bolitas de pasta francesa aplastadas, mortero (<a class="xref" href="#ligeras">pasta ligera 5c</a>).</p>
+      <ol><li>Unta mortero en zonas chicas.</li><li>Hunde piedras o bolitas aplastadas variando tamaños.</li><li>Pinta cada piedra un poco distinta dentro de la misma familia.</li><li>Lavado oscuro y tierra seca entre piedras.</li></ol>
+      <p class="tipline">Pon las piedras grandes primero y rellena con las chicas.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Ladrillo y adobe</h3><div class="pal"><i style="--c:#7B3624"></i><i style="--c:#B5603E"></i><i style="--c:#C9A882"></i></div></div>
+      <p class="look">Muro de rancho, horno, barda de pueblo.</p>
+      <p class="v-mat"><b>Materiales:</b> PVC espumado grabado, pink foam o pasta ligera con paja picada (adobe).</p>
+      <ol><li>Graba juntas con regla y punzón, ladrillos desfasados.</li><li>Pinta cada ladrillo con variaciones de rojo y naranja.</li><li>Junta clara (mortero) con lavado o pincel fino.</li><li>Adobe: bloques más grandes, color tierra, paja o hilo de yute picado en la masilla.</li></ol>
+      <p class="tipline">Quiebra algunas esquinas de ladrillo con pinzas.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Concreto y cemento</h3><div class="pal"><i style="--c:#5E605F"></i><i style="--c:#9A9C99"></i><i style="--c:#C8C9C5"></i></div></div>
+      <p class="look">Búnker, edificio brutalista, banqueta rota.</p>
+      <p class="v-mat"><b>Materiales:</b> pasta ligera con bicarbonato, papel aluminio arrugado, palitos para marcar cimbra.</p>
+      <ol><li>Aplica pasta y golpea con aluminio arrugado para poros.</li><li>Marca líneas de cimbra (moldes de madera) cada cierta distancia.</li><li>Gris medio, puntea con gris claro y oscuro.</li><li>Escurrimientos verticales oscuros desde arriba y manchas de humedad.</li></ol>
+      <p class="tipline">Para concreto roto, deja asomar "varilla": alambre pintado de óxido.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Roca natural y cueva</h3><div class="pal"><i style="--c:#3A342E"></i><i style="--c:#7D7266"></i><i style="--c:#B7AC9C"></i></div></div>
+      <p class="look">Acantilado, gruta, montaña.</p>
+      <p class="v-mat"><b>Materiales:</b> papel aluminio arrugado como molde, masilla de maché, tela manta con resistol, cartón de huevo.</p>
+      <ol><li>Arruga papel aluminio y desarrúgalo a medias.</li><li>Presiónalo sobre la masilla fresca y retíralo: queda la grieta de roca.</li><li>Para volumen, rellena con cartón de huevo empapado en resistol y cubre con manta.</li><li>Base negra, pincel seco en tres tonos, de oscuro a claro.</li></ol>
+      <p class="tipline">Mira una foto real de roca y copia la dirección de las capas (estratos).</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Ruina y piedra con musgo</h3><div class="pal"><i style="--c:#4E4A42"></i><i style="--c:#5E7240"></i><i style="--c:#A8A08F"></i></div></div>
+      <p class="look">Templo abandonado, castillo, panteón.</p>
+      <p class="v-mat"><b>Materiales:</b> cualquier piedra de esta lista, cascarón de huevo, borra fina, pigmento verde, aserrín teñido.</p>
+      <ol><li>Rompe esquinas y bordes de los sillares, nunca rectos.</li><li>Pega cascarón de huevo machacado en zonas: se ve como piel de piedra quebrada.</li><li>Manchas verdes y negras de humedad desde las juntas.</li><li>Musgo: aserrín teñido de verde o borra pegada con resistol.</li></ol>
+      <p class="tipline">El musgo crece en la parte baja y del lado donde se junta el agua.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ILUSIONES -->
+<section id="ilusiones">
+  <div class="sec-head">
+    <span class="label">Trucos de ilusión</span>
+    <h2>Lo que parece y no es</h2>
+    <p>Agua que no moja, pasto que no crece y metal que no pesa. Recuerda que tu cubo tiene caras verticales: fíjate en la etiqueta de cada truco para saber si aguanta de lado o solo funciona en la cara de arriba.</p>
+  </div>
+  <div class="illus">
+
+    <div class="il water">
+      <div class="il-head"><h3>Agua que no es agua</h3><p>El agua se vende con dos cosas: un fondo pintado con profundidad y una superficie brillante. Sin el fondo, el brillo solo parece plástico.</p></div>
+      <div class="trick"><h4>1 · Pinta el fondo primero <span class="ok">vertical y horizontal</span></h4><p>Más oscuro al centro (lo hondo) y más claro hacia las orillas. Para río: café verdoso al centro y arena en la orilla. Para mar: azul marino al centro y turquesa. Agrega piedras y arena antes del brillo.</p></div>
+      <div class="trick"><h4>2 · Gel brillante o Mod Podge brillante <span class="ok">vertical y horizontal</span></h4><p>Gel acrílico brillante transparente (gel medium) aplicado grueso. Pica con el pincel y jálalo hacia arriba para hacer olas con punta. Se ve blanco al aplicarlo y transparenta al secar, que puede tardar días si es grueso.</p></div>
+      <div class="trick"><h4>3 · Silicón transparente de ferretería <span class="ok">vertical y horizontal</span></h4><p>Úntalo con palito de paleta y arrástralo para formar ondas o corriente. Ideal para cascadas y escurrimientos en caras laterales. Huele a vinagre al secar: trabaja con ventana abierta.</p></div>
+      <div class="trick"><h4>4 · Silicón caliente transparente <span class="ok">vertical y horizontal</span></h4><p>Hilos y gotas largas para goteras, chorros y salpicaduras. Deja caer gotas desde la pistola y jala hacia abajo para que se estiren como agua que cae.</p></div>
+      <div class="trick"><h4>5 · Plástico arrugado <span class="ok">vertical y horizontal</span></h4><p>Papel celofán o plástico autoadherible de cocina, arrugado y estirado a medias, pegado sobre el fondo pintado con resistol en las orillas. Encima una capa de barniz brillante. Muy rápido para mar picado.</p></div>
+      <div class="trick"><h4>6 · Agua estancada o charco <span class="ok">solo cara de arriba</span></h4><p>Barniz brillante en varias capas delgadas sobre tierra oscura pintada. Para pantano, mete un poco de verde y café en las primeras capas y deja aserrín verde flotando.</p></div>
+      <div class="trick"><h4>7 · Espuma y reflejos <span class="ok">vertical y horizontal</span></h4><p>Pincel seco blanco en la punta de las olas y alrededor de piedras. Unos toques de blanco puro casi seco donde pega la luz. Algodón muy deshebrado pegado con resistol para espuma de cascada.</p></div>
+      <p class="il-note">Resina epóxica de dos componentes: se ve increíble pero solo en horizontal, necesita guantes y ventilación, y escurre en caras laterales. Para el cubo no es la mejor opción.</p>
+    </div>
+
+    <div class="il grass">
+      <div class="il-head"><h3>Pasto que no es pasto</h3><p>El pasto real nunca es de un solo verde. Mezcla tres verdes, un amarillo paja y un café, y deja parches de tierra a la vista.</p></div>
+      <div class="trick"><h4>1 · Aserrín teñido <span class="ok">vertical y horizontal</span></h4><p>Revuelve aserrín fino con pintura vinílica verde diluida en agua, extiéndelo en periódico y deja secar. Haz tandas de varios tonos. Unta resistol en la cara, espolvorea, presiona y sacude el sobrante.</p></div>
+      <div class="trick"><h4>2 · Esponja molida <span class="ok">vertical y horizontal</span></h4><p>Esponja de colchón o de cojín picada o licuada en seco, teñida igual que el aserrín. Da textura de césped corto, matorral o musgo según el tamaño del grano.</p></div>
+      <div class="trick"><h4>3 · Peluche sintético <span class="ok">vertical y horizontal</span></h4><p>Tela de peluche de pelo largo, pegada con el pelo hacia afuera. Píntala con verde aguado, péinala en una dirección y recorta con tijera para dejar alturas distintas. Parece pasto alto.</p></div>
+      <div class="trick"><h4>4 · Guata o relleno de cojín <span class="ok">vertical y horizontal</span></h4><p>Jálala en tiras delgadas, pégala y píntala con verdes, cafés y amarillos. También sirve como follaje y copa de árbol.</p></div>
+      <div class="trick"><h4>5 · Yute o rafia deshebrada <span class="ok">vertical y horizontal</span></h4><p>Desenrolla el hilo y córtalo en mechones de 1–2&nbsp;cm. Pega por la base con una gota de silicón: parece zacate seco, paja o pasto de desierto.</p></div>
+      <div class="trick"><h4>6 · Cerdas de escoba y brocha <span class="ok">vertical y horizontal</span></h4><p>Corta cerdas, haz manojos y pégalos de pie para matas, carrizo o pasto de orilla de río.</p></div>
+      <div class="trick"><h4>7 · Musgo y hojarasca <span class="ok">vertical y horizontal</span></h4><p>Fibra verde de trastes desmenuzada para musgo. Té seco (hojas de bolsita) o hierbas secas machacadas para hojas caídas. Pega con resistol rebajado.</p></div>
+      <p class="il-note">El pasto estático comercial (fibras que se paran solas) se ve muy real pero necesita un aplicador eléctrico. Para el cubo, el peluche y el aserrín dan buen resultado con menos costo.</p>
+    </div>
+
+    <div class="il metal">
+      <div class="il-head"><h3>Metal que no es metal</h3><p>La regla de oro: base negra o muy oscura y brillo solo donde pegaría la luz, en filos y relieves. Si pintas todo de plata, se ve como juguete.</p></div>
+      <div class="trick"><h4>1 · Grafito sobre negro mate <span class="ok">vertical y horizontal</span></h4><p>Pinta negro mate, frota grafito en polvo o lápiz 8B con trapo o dedo. Hierro y acero con brillo real. Sella con barniz para no dejar huellas.</p></div>
+      <div class="trick"><h4>2 · Cinta de aluminio <span class="ok">vertical y horizontal</span></h4><p>La cinta metálica de ductos (en ferretería) se pega directo sobre el PVC espumado. Marca remaches y juntas con la punta de un lápiz. Envejece con lavado negro o betún.</p></div>
+      <div class="trick"><h4>3 · Papel aluminio + betún <span class="ok">vertical y horizontal</span></h4><p>Pega aluminio sobre un relieve, unta betún negro y limpia: oscuro en huecos, brillante arriba. Funciona para repujado, armadura y placas.</p></div>
+      <div class="trick"><h4>4 · Crema metálica o pincel seco metálico <span class="ok">vertical y horizontal</span></h4><p>Crema tipo cera metálica (Rub n' Buff y similares) frotada con el dedo, o pintura plata casi seca en el pincel. Solo en lo que sobresale.</p></div>
+      <div class="trick"><h4>5 · Aerosol cromo <span class="ok">vertical y horizontal</span></h4><p>Sobre PVC espumado o estireno sellados da espejo. Rocía en capas muy finas, al aire libre y de lejos. Prueba antes en un recorte: algunos aerosoles atacan el estireno.</p></div>
+      <div class="trick"><h4>6 · Papel metalizado de chocolates o regalo <span class="ok">vertical y horizontal</span></h4><p>Alisado y pegado con resistol para láminas de oro, cobre o latón en detalles pequeños, letreros y botones.</p></div>
+      <div class="trick"><h4>7 · Gotas de soldadura y tornillos falsos <span class="ok">vertical y horizontal</span></h4><p>Cordones de silicón caliente en las uniones como soldadura, cabezas de tornillo con bolitas de pasta francesa y una raya de cúter. Pinta junto con el resto.</p></div>
+      <p class="il-note">Para versiones completas (oxidado, cobre con pátina, cepillado, martillado) ve a la <a class="xref" href="#metal">sección Metal</a>, que incluye <a class="xref" href="#oxido-real-t">óxido real</a>.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- 2 RECETAS -->
+<section id="recetas">
+  <div class="sec-head">
+    <span class="label">Recetario</span>
+    <h2>Masillas y pastas</h2>
+    <p>Las medidas son en tazas y cucharadas de cocina (taza = 240&nbsp;ml, cda = 15&nbsp;ml). Usa utensilios que no regreses a la cocina.</p>
+  </div>
+
+  <div class="recipes">
+
+    <!-- CAFE -->
+    <article class="card cafe" id="cafe">
+      <div class="side">
+        <span class="code">FICHA 01</span>
+        <h3>Masilla de borra de café</h3>
+        <div class="meta"><span class="chip">tierra</span><span class="chip">corteza</span><span class="chip">piedra porosa</span><span class="chip">reciclado</span></div>
+        <p>La borra funciona como relleno y como pigmento: da un grano natural café oscuro que parece tierra, madera vieja o piedra volcánica sin pintar.</p>
+        <div class="warn"><b>Clave:</b> la borra debe estar totalmente seca. Extiéndela en una charola 1–2 días al sol. Si está húmeda le sale moho.</div>
+      </div>
+      <div class="main">
+        <span class="label">Versión A · cocida (masa moldeable)</span>
+        <ul class="ing">
+          <li><b>10 cda</b> borra de café seca</li>
+          <li><b>7 cda</b> almidón (tapioca o maicena)</li>
+          <li><b>1 cda</b> vinagre blanco</li>
+          <li><b>180 ml</b> agua</li>
+        </ul>
+        <ol class="steps">
+          <li>Mezcla todo en frío hasta que no queden grumos.</li>
+          <li>Cocina a fuego bajo sin dejar de mover. Espesa rápido: en cuanto se despegue de la olla, apaga.</li>
+          <li>Deja entibiar y amasa. Presiona sobre la base o en molde forrado con papel encerado.</li>
+          <li>Seca al aire de 2 a 4 días según el grosor.</li>
+        </ol>
+        <div class="variant">
+          <span class="label">Versión B · en frío (para untar textura)</span>
+          <ul class="ing">
+            <li><b>1 parte</b> borra seca</li>
+            <li><b>1 parte</b> Resistol 850</li>
+            <li><b>½ parte</b> pasta para juntas o resanador (opcional, da cuerpo)</li>
+          </ul>
+          <p>Úntala con espátula o pincel viejo y textura con esponja, cepillo o papel aluminio arrugado. Ajusta: más borra = más grano; más resistol = más pegajosa.</p>
+          <div class="tip cafe">También puedes revolver borra en una arcilla de secado al aire que ya tengas: agrega una cucharada a la vez hasta lograr el grano que quieres.</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MACHE -->
+    <article class="card" id="mache">
+      <div class="side">
+        <span class="code">FICHA 02</span>
+        <h3>Masilla de papel maché</h3>
+        <div class="meta"><span class="chip">piedra</span><span class="chip">roca</span><span class="chip">orgánico</span><span class="chip">detalle fino</span></div>
+        <p>Receta de la escultora Jonni Good (Ultimate Paper Mache). Queda tersa, aguanta detalle y seca dura. Muy buena para rocas, relieves y ornamentos.</p>
+        <div class="tip">Si no consiguen pasta para juntas, la versión sencilla es pulpa de papel + harina + resistol (<a class="xref" href="#mache-sencilla">ver abajo</a>).</div>
+      </div>
+      <div class="main">
+        <span class="label">Rinde ≈ 1 litro</span>
+        <ul class="ing">
+          <li><b>1¼ taza</b> papel higiénico remojado y bien exprimido</li>
+          <li><b>1 taza</b> pasta para juntas premezclada, tipo "regular" (la de tablaroca, no la de secado rápido ni la ligera)</li>
+          <li><b>¾ taza</b> Resistol 850 (cola blanca)</li>
+          <li><b>½ taza</b> harina de trigo</li>
+          <li><b>1 cda</b> glicerina (opcional, la hace más suave)</li>
+        </ul>
+        <ol class="steps">
+          <li>Remoja el papel, exprímelo y mídelo apretado en la taza. Desmenúzalo en trozos chicos.</li>
+          <li>Agrega pasta para juntas, resistol y glicerina. Bate con batidora de mano hasta que el papel desaparezca.</li>
+          <li>Añade la harina y bate de nuevo. Si sigue pegajosa, amasa con más harina sobre la mesa.</li>
+          <li>Aplica en capas de 3–6&nbsp;mm. Guarda el sobrante en recipiente hermético.</li>
+        </ol>
+        <div class="variant" id="mache-sencilla">
+          <span class="label">Versión sencilla · sin pasta para juntas</span>
+          <p>Pulpa de papel (periódico o papel reciclado licuado y exprimido) + harina + resistol hasta que tenga consistencia de plastilina. Queda más rugosa y fibrosa: ideal para tierra, corteza o muros viejos, menos para detalle fino.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- FRANCESA -->
+    <article class="card" id="francesa">
+      <div class="side">
+        <span class="code">FICHA 03</span>
+        <h3>Pasta francesa (porcelana fría)</h3>
+        <div class="meta"><span class="chip">ornamento</span><span class="chip">molduras</span><span class="chip">flores</span><span class="chip">detalle fino</span></div>
+        <p>Masa blanca muy fina que seca al aire en unas 24 horas (más en clima húmedo). Perfecta para molduras, remaches, hojas, adornos y piezas pequeñas que se pegan a la superficie.</p>
+        <div class="tip">Para piezas grandes, no la hagas maciza: forra un núcleo de unicel o pink foam con una capa delgada.</div>
+      </div>
+      <div class="main">
+        <span class="label">Receta de casa</span>
+        <ul class="ing">
+          <li><b>1 taza</b> maicena</li>
+          <li><b>1 taza</b> Resistol 850</li>
+          <li><b>1 cda</b> vaselina o crema corporal</li>
+          <li><b>1 cda</b> jugo de limón o vinagre (conservador)</li>
+        </ul>
+        <ol class="steps">
+          <li>Mezcla todo en frío en una olla antiadherente.</li>
+          <li>Cocina a fuego bajo moviendo sin parar. Primero se hace grumosa; sigue hasta que forme una bola que se despegue de la olla.</li>
+          <li>Pásala a una superficie untada con crema y amasa en cuanto la aguantes, hasta que quede lisa.</li>
+          <li>Guárdala en bolsa hermética, sin aire, y deja reposar unas horas antes de usar.</li>
+        </ol>
+        <div class="tip">Pega las piezas con cola vinílica. Para colorearla, mezcla pintura acrílica en la masa o píntala ya seca.</div>
+      </div>
+    </article>
+
+    <!-- JAPONESA -->
+    <article class="card" id="japonesa">
+      <div class="side">
+        <span class="code">FICHA 04</span>
+        <h3>Pasta japonesa</h3>
+        <div class="meta"><span class="chip">resistente</span><span class="chip">translúcida</span><span class="chip">flores</span></div>
+        <p>En tiendas de manualidades se le llama así a las arcillas japonesas de secado al aire, como la arcilla de resina tipo Padico Modena. Son más resistentes que la porcelana fría y aguantan mejor la humedad.</p>
+      </div>
+      <div class="main">
+        <span class="label">Cómo se comporta</span>
+        <ul class="ing">
+          <li><b>Secado</b> al aire; se vuelve algo translúcida al secar</li>
+          <li><b>Resistencia</b> buena al doblez y al agua una vez seca</li>
+          <li><b>Uso</b> piezas delgadas, pétalos, filigrana, y como capa de textura</li>
+        </ul>
+        <ol class="steps">
+          <li>Amasa una porción chica; mantén el resto bien cerrado porque seca rápido.</li>
+          <li>Trabaja con las manos o herramientas ligeramente untadas de crema.</li>
+          <li>Para textura, presiona sellos, encaje, hojas reales o tela sobre la pasta fresca.</li>
+          <li>Pega con cola blanca cuando aún esté fresca o con kola loka ya seca.</li>
+        </ol>
+        <div class="tip">Si no la consiguen, la <a class="xref" href="#francesa">pasta francesa (ficha 03)</a> cubre casi todo lo mismo para el cubo. El nombre varía por tienda: pregunten por "arcilla japonesa" o "arcilla de resina".</div>
+      </div>
+    </article>
+
+    <!-- LIGERAS -->
+    <article class="card" id="ligeras">
+      <div class="side">
+        <span class="code">FICHA 05</span>
+        <h3>Pastas ligeras para textura</h3>
+        <div class="meta"><span class="chip">muro</span><span class="chip">estuco</span><span class="chip">concreto</span><span class="chip">tierra</span></div>
+        <p>No son para modelar figuras, sino para cubrir superficie y marcarla: estuco, concreto viejo, tierra, muros descarapelados. Se aplican con espátula, esponja o brocha.</p>
+      </div>
+      <div class="main">
+        <span class="label">5a · Pasta de modelar casera</span>
+        <ul class="ing">
+          <li><b>4 cda</b> pasta para juntas</li>
+          <li><b>2 cda</b> Resistol 850</li>
+          <li><b>al gusto</b> arena fina cernida o bicarbonato para grano</li>
+        </ul>
+        <p>Mezcla hasta que sea cremosa. Úntala, pasa una plantilla (esténcil) para relieves o espolvorea arena encima y presiónala.</p>
+
+        <div class="variant">
+          <span class="label">5b · Pasta de papel y yeso</span>
+          <p>Papel higiénico + yeso en polvo + agua + un chorrito de resistol, mezclado hasta deshacer los grumos de papel. Sirve como pasta de textura y, con más papel, como arcilla para formar terreno. Sin resistol queda más quebradiza.</p>
+        </div>
+        <div class="variant">
+          <span class="label">5c · Mortero de tierra</span>
+          <p>Arena de río cernida + yeso + resistol + pintura acrílica café. Hazla de más: deja secar un poco aparte, desmorónala y úsala como "tierra suelta" encima.</p>
+        </div>
+        <div class="tip">La pasta de modelar acrílica comercial se cuartea cuando la pones muy gruesa. Aprovéchalo para un craquelado de pintura vieja o tierra seca.</div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- 3 ESPUMAS -->
+<section id="espumas">
+  <div class="sec-head">
+    <span class="label">Volumen ligero</span>
+    <h2>Espumas</h2>
+    <p>Úsalas cuando la textura necesita volumen sin peso: rocas salientes, troncos, sillares, bordes rotos.</p>
+  </div>
+  <div class="recipes">
+    <article class="card foamy" id="pinkfoam">
+      <div class="side">
+        <span class="code">FICHA 06</span>
+        <h3>Pink foam (poliestireno extruido, XPS)</h3>
+        <div class="meta"><span class="chip">piedra</span><span class="chip">ladrillo</span><span class="chip">madera</span></div>
+        <p>La placa rosa, azul o morada de aislante. Más densa y homogénea que el unicel blanco: se talla limpio y guarda el detalle.</p>
+        <div class="warn">La pintura en aerosol lo derrite y el plumón permanente se lo "come". Séllalo primero.</div>
+      </div>
+      <div class="main">
+        <span class="label">Técnicas de textura</span>
+        <ul class="ing">
+          <li><b>Lápiz sin punta</b> o pluma: dibuja con presión para hundir juntas de ladrillo y tablas.</li>
+          <li><b>Cepillo de alambre</b>: rasca en una sola dirección para veta de madera.</li>
+          <li><b>Pinzas</b>: arranca pedacitos al azar para roca rugosa.</li>
+          <li><b>Piedra real</b>: ruédala presionando para piedra gastada.</li>
+          <li><b>Bola de aluminio</b>: presiónala y gírala para poro de piedra.</li>
+          <li><b>Cortes en ángulo</b>: separa sillares a distintas alturas.</li>
+        </ul>
+        <span class="label">Sellado antes de pintar</span>
+        <p>Mezcla mitad Mod Podge (o resistol) y mitad pintura acrílica negra, y cubre toda la pieza: es base de color y capa protectora a la vez. Con eso ya puedes usar aerosol desde lejos y en capas finas. Prueba siempre en un recorte.</p>
+        <div class="tip">Se pega al PVC o estireno con silicón frío o adhesivo de contacto base agua. Evita pegamentos con solvente.</div>
+      </div>
+    </article>
+
+    <article class="card foamy" id="foamclay">
+      <div class="side">
+        <span class="code">FICHA 07</span>
+        <h3>Foam clay y foami (EVA)</h3>
+        <div class="meta"><span class="chip">ligero</span><span class="chip">flexible</span><span class="chip">moldes</span></div>
+        <p>La foam clay es una espuma moldeable como plastilina que seca al aire y queda como hule espuma denso. El foami grueso (EVA) se corta, se lija y se textura con calor.</p>
+      </div>
+      <div class="main">
+        <span class="label">Foam clay</span>
+        <ul class="ing">
+          <li><b>Amasar</b> 1–2 min hasta quitar grumos</li>
+          <li><b>Secado</b> 24–48 h; por dentro tarda más aunque se sienta seca</li>
+          <li><b>Lijado</b> fino, grano 180–320</li>
+          <li><b>Pintura</b> acrílica después de una imprimación</li>
+        </ul>
+        <p>Se presiona bien en moldes de silicón (fondant, repostería) para sacar remaches, filigrana o escamas idénticas. Se pega sola al foami y a otras espumas. Si se reseca mientras trabajas, unas gotas de agua la reviven.</p>
+        <div class="variant">
+          <span class="label">Foami (EVA)</span>
+          <p>Calienta con pistola de calor y presiona una bola de aluminio, una piedra o un sello para dejar la huella. Con el mismo calor se curva. Sella con Mod Podge o resistol antes de pintar.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- RESINAS -->
+<section id="resinas" class="elem resin">
+  <div class="elem-head">
+    <span class="elem-sym" aria-hidden="true">Rs</span>
+    <div class="sec-head">
+      <span class="label">Material especial</span>
+      <h2>Resinas</h2>
+      <p>Líquidos que endurecen por reacción química o con luz UV. Dan lo que ningún otro material da: transparencia real, brillo de vidrio y copias idénticas de una pieza. Son más caras, más lentas y piden más cuidado, así que úsalas donde de verdad hacen la diferencia.</p>
+    </div>
+  </div>
+
+  <div class="best">
+    <div class="best-box">
+      <h3>Cuándo conviene usarlas</h3>
+      <ul class="rs-list">
+        <li><b>Agua profunda y transparente</b> en la cara de arriba: charco, estanque, vaso o botella con líquido.</li>
+        <li><b>Hielo, cristales, gemas y vidrio:</b> joyas de utilería, minerales, ventanas, botellas.</li>
+        <li><b>Copias idénticas</b> de una pieza (remaches, ornamentos, calaveras, piedras) con un molde de silicón.</li>
+        <li><b>Piezas que se van a tocar mucho</b> y deben aguantar golpes.</li>
+        <li><b>Capa protectora dura</b> sobre una pieza ya pintada (epóxica delgada).</li>
+      </ul>
+    </div>
+    <div class="best-box">
+      <h3>Cuándo no conviene</h3>
+      <ul class="rs-list rs-no">
+        <li><b>Caras verticales del cubo:</b> la resina líquida escurre. Ahí usa gel brillante o silicón transparente (ver <a class="xref" href="#ilusiones">Agua, pasto y metal falsos</a>).</li>
+        <li><b>Texturas grandes y rápidas:</b> para piedra o madera en toda una cara, una masilla es más barata y rápida.</li>
+        <li><b>Sin ventilación ni protección:</b> si no tienes guantes, lentes y aire circulando, no la uses.</li>
+        <li><b>Resina poliéster sobre pink foam, unicel o estireno:</b> contiene estireno y los disuelve.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="yt-group">Tipos de resina</h3>
+  <div class="vgrid">
+    <article class="v">
+      <div class="v-top"><h3>Epóxica (cristal)</h3><div class="pal"><i style="--c:#DDEFF5"></i><i style="--c:#7FB9CC"></i><i style="--c:#2C7894"></i></div></div>
+      <p class="look">La más usada para agua, encapsular y capas de brillo.</p>
+      <p class="v-mat"><b>Cómo es:</b> dos componentes (resina + endurecedor) en la proporción exacta que indica la marca. Transparente, poco olor, cura en 24 a 72 horas.</p>
+      <ol><li>Respeta el grosor máximo por capa que dice el envase. Hay de capa delgada (recubrimiento) y de vaciado profundo.</li><li>Funciona sobre PVC espumado lijado y sobre espumas sin derretirlas.</li><li>Mejor resultado con el cuarto a unos 21&nbsp;°C.</li></ol>
+      <p class="tipline">Es la opción más segura para empezar en clase.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Poliéster (resina cristal + catalizador)</h3><div class="pal"><i style="--c:#F2EBC9"></i><i style="--c:#C9B776"></i><i style="--c:#7A6A33"></i></div></div>
+      <p class="look">La de fibra de vidrio; barata y muy dura.</p>
+      <p class="v-mat"><b>Cómo es:</b> se catalizan con gotas de catalizador (MEKP) contadas según la cantidad. Olor muy fuerte, endurece en minutos u horas, puede amarillar.</p>
+      <ol><li>Úsala solo al aire libre o con extracción y respirador para vapores orgánicos.</li><li>Nunca sobre pink foam, unicel ni estireno: los disuelve.</li><li>Más catalizador no es mejor: se calienta, se agrieta y puede humear.</li></ol>
+      <p class="tipline">Para este proyecto, prefiere epóxica o UV.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Poliuretano de colada rápida</h3><div class="pal"><i style="--c:#F4F2EC"></i><i style="--c:#D8D2C6"></i><i style="--c:#9A9286"></i></div></div>
+      <p class="look">Para copiar piezas sólidas en molde de silicón.</p>
+      <p class="v-mat"><b>Cómo es:</b> dos partes, muchas marcas se mezclan 1:1. Queda blanca u opaca, se desmolda en minutos y se puede lijar, pegar y pintar.</p>
+      <ol><li>Es sensible a la humedad: cierra bien los envases y trabaja en lugar seco.</li><li>Tiene poco tiempo de trabajo: mezcla cantidades chicas y vacía de inmediato.</li><li>Las piezas salen calientes: deja que se enfríen antes de tocarlas.</li></ol>
+      <p class="tipline">Ideal para hacer 20 remaches o adornos iguales en una tarde.</p>
+    </article>
+    <article class="v">
+      <div class="v-top"><h3>Resina UV</h3><div class="pal"><i style="--c:#EAF6F2"></i><i style="--c:#A6D9CF"></i><i style="--c:#C24F78"></i></div></div>
+      <p class="look">Para piezas chicas, gotas y reparaciones rápidas.</p>
+      <p class="v-mat"><b>Cómo es:</b> un solo componente que endurece con lámpara UV (o con sol, más lento) en pocos minutos. Cara por gramo.</p>
+      <ol><li>Trabaja en capas delgadas y cura cada una antes de la siguiente.</li><li>Sirve para gemas pequeñas, gotas de agua o lluvia, sangre falsa brillante, botones.</li><li>También funciona en caras verticales si pones gotas pequeñas y las curas al instante con la lámpara.</li></ol>
+      <p class="tipline">No mires directo a la lámpara UV y usa guantes: sin curar es pegajosa e irritante.</p>
+    </article>
+  </div>
+
+  <h3 class="yt-group">Cómo usarla paso a paso</h3>
+  <div class="finish rs-steps">
+    <div><h3>Lee la ficha</h3><p>Proporción (por peso o por volumen), tiempo de trabajo, grosor máximo por capa y tiempo de curado. Cada marca es distinta.</p></div>
+    <div><h3>Prepara el lugar</h3><p>Ventilación, mesa cubierta con plástico, guantes de nitrilo, lentes y manga larga. Pieza nivelada y sin polvo.</p></div>
+    <div><h3>Sella la base</h3><p>Si la superficie es porosa (yeso, papel, madera), pásale una capa delgada antes: así no salen burbujas desde abajo.</p></div>
+    <div><h3>Mide exacto</h3><p>Usa báscula en gramos o vasos graduados. Una proporción mal medida deja la resina pegajosa para siempre.</p></div>
+    <div><h3>Mezcla lento</h3><p>De 2 a 3 minutos, raspando paredes y fondo del vaso. Si bates rápido metes aire.</p></div>
+    <div><h3>Vierte en capas</h3><p>Respeta el grosor máximo. Una capa demasiado gruesa se calienta, se agrieta, se pone amarilla o humea.</p></div>
+    <div><h3>Saca burbujas</h3><p>Revienta las de la superficie con un palillo o con pasadas muy rápidas de pistola de calor a distancia, sin calentar el PVC.</p></div>
+    <div><h3>Deja curar</h3><p>No la toques. Tápala con una caja para que no le caiga polvo y espera el tiempo completo que indica la marca.</p></div>
+  </div>
+
+  <div class="grid2">
+    <div class="base">
+      <h3>Copias con molde de silicón</h3>
+      <ul>
+        <li>Haz la pieza original en pasta francesa, masilla epóxica o plastilina dura.</li>
+        <li>Pégala al fondo de una cajita y rodéala con silicón para moldes; deja curar.</li>
+        <li>Saca la pieza: el hueco es tu molde. Aplica desmoldante si la marca lo pide.</li>
+        <li>Vacía poliuretano o epóxica, desmolda, lija la rebaba y pinta.</li>
+      </ul>
+    </div>
+    <div class="base">
+      <h3>Color y efectos</h3>
+      <ul>
+        <li>Usa pigmentos o tintas para resina. La pintura acrílica en exceso puede impedir que endurezca.</li>
+        <li><b>Agua:</b> tinta muy poco la primera capa y deja la última transparente. Las piedras y la arena van pintadas debajo.</li>
+        <li><b>Hielo:</b> resina transparente con burbujas atrapadas a propósito y un poco de blanco.</li>
+        <li><b>Gemas:</b> tinta transparente y un fondo de papel aluminio o brillantina para que refleje.</li>
+      </ul>
+    </div>
+    <div class="base">
+      <h3>Sobre tu cubo</h3>
+      <ul>
+        <li><b>PVC espumado:</b> la epóxica y la UV agarran bien sobre placa lijada. Solo en la cara de arriba o en piezas que se pegan después.</li>
+        <li><b>Estireno:</b> la epóxica funciona; evita la poliéster.</li>
+        <li><b>Truco para caras laterales:</b> haz la pieza de resina en plano (dentro de un marco o molde) y pégala ya curada con kola loka o silicón.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warn">Resina sin curar: no tocarla sin guantes. Si cae en la piel, lava con agua y jabón; no uses solventes. El sobrante mezclado déjalo endurecer en su vaso, abierto y lejos de papel, antes de tirarlo: al curar en cantidad se calienta mucho.</div>
+</section>
+
+
+<!-- 5 COMPARAR -->
+<section id="comparar">
+  <div class="sec-head">
+    <span class="label">Comparativo</span>
+    <h2>¿Cuál uso?</h2>
+    <p>Valores relativos para decidir rápido. Más puntos = más de esa cualidad. Las columnas de PVC espumado y estireno indican qué tan bien se agarra el material a esa base y cuánto aguanta sin despegarse, cuartearse ni deformar la placa.</p>
+  </div>
+
+  <div class="best">
+    <div class="best-box">
+      <h3>Lo más resistente sobre PVC espumado (6&nbsp;mm)</h3>
+      <ol>
+        <li><b>Grabado directo</b> con punzón o lápiz: es la misma placa, no se despega nunca.</li>
+        <li><b>Masilla de papel maché</b> y <b>pastas ligeras</b> con pasta para juntas: secan duras y agarran muy bien si lijaste e imprimaste con resistol.</li>
+        <li><b>Masilla epóxica</b>: la unión más dura para remaches, bisagras y adornos que se van a tocar.</li>
+        <li><b>Pink foam</b> pegado con silicón frío: volumen ligero que no se cae.</li>
+        <li><b>Cinta de aluminio</b>: se adhiere sola y no se levanta.</li>
+      </ol>
+    </div>
+    <div class="best-box">
+      <h3>Lo más resistente sobre estireno</h3>
+      <ol>
+        <li><b>Grabado y rayado</b> con sierra, punta o lija gruesa: no agrega material, así que nada se despega.</li>
+        <li><b>Piezas de estireno</b> pegadas con cemento para plásticos: se suelda plástico con plástico.</li>
+        <li><b>Masilla epóxica</b> y piezas chicas de pasta francesa o japonesa pegadas con kola loka.</li>
+        <li><b>Cinta de aluminio</b> y foam clay en capa delgada.</li>
+        <li>Evita masillas gruesas con mucha agua: el estireno es liso y no absorbe, así que se despegan o pandean la placa.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Material</th><th>Peso</th><th>Detalle fino</th><th>Secado</th><th>Sobre PVC espumado</th><th>Sobre estireno</th><th>Mejor para</th></tr></thead>
+      <tbody>
+        <tr><td>Grabado directo en la placa</td><td>Nada</td><td class="dots">●●●</td><td>No aplica</td><td><span class="dots">●●●</span><span class="note">Blando, marca profundo</span></td><td><span class="dots">●●○</span><span class="note">Duro, marca poco profundo</span></td><td>Ladrillo, tablas, juntas, grietas</td></tr>
+        <tr><td>Masilla de borra</td><td class="dots">●●○</td><td class="dots">●○○</td><td>2–4 días</td><td><span class="dots">●●○</span><span class="note">Lija e imprima; capas delgadas</span></td><td><span class="dots">●○○</span><span class="note">Se despega en capa gruesa</span></td><td>Tierra, roca porosa, corteza, óxido</td></tr>
+        <tr><td>Papel maché (Jonni Good)</td><td class="dots">●●○</td><td class="dots">●●●</td><td>1–3 días</td><td><span class="dots">●●●</span><span class="note">Seca dura y bien anclada</span></td><td><span class="dots">●○○</span><span class="note">Mucha agua, puede pandear</span></td><td>Roca, relieve, figuras</td></tr>
+        <tr><td>Pasta francesa</td><td class="dots">●●○</td><td class="dots">●●●</td><td>≈24 h</td><td><span class="dots">●●○</span><span class="note">Pegar con cola blanca</span></td><td><span class="dots">●●○</span><span class="note">Piezas chicas con kola loka</span></td><td>Molduras, adornos, remaches</td></tr>
+        <tr><td>Pasta japonesa</td><td class="dots">●○○</td><td class="dots">●●●</td><td>Al aire</td><td><span class="dots">●●○</span><span class="note">Más resistente que la francesa</span></td><td><span class="dots">●●○</span><span class="note">Piezas chicas con kola loka</span></td><td>Piezas delgadas y resistentes</td></tr>
+        <tr><td>Pastas ligeras (pasta para juntas + resistol)</td><td class="dots">●●○</td><td class="dots">●○○</td><td>Horas</td><td><span class="dots">●●●</span><span class="note">Muy buena sobre placa lijada</span></td><td><span class="dots">●○○</span><span class="note">Se cuartea y se levanta</span></td><td>Muros, estuco, concreto</td></tr>
+        <tr><td>Aserrín o arena con resistol</td><td class="dots">●○○</td><td class="dots">●○○</td><td>Horas</td><td><span class="dots">●●●</span><span class="note">Sellar encima con resistol 1:1</span></td><td><span class="dots">●●○</span><span class="note">Capa fina, raya antes la placa</span></td><td>Madera aglomerada, granito, suelo</td></tr>
+        <tr><td>Pink foam (XPS)</td><td class="dots">●○○</td><td class="dots">●●○</td><td>No aplica</td><td><span class="dots">●●●</span><span class="note">Silicón frío o adhesivo base agua</span></td><td><span class="dots">●●○</span><span class="note">Silicón frío; nada con solvente</span></td><td>Volumen: sillares, rocas, vigas</td></tr>
+        <tr><td>Foam clay</td><td class="dots">●○○</td><td class="dots">●●○</td><td>24–48 h</td><td><span class="dots">●●○</span><span class="note">Mejor con imprimación</span></td><td><span class="dots">●●○</span><span class="note">Capa delgada, flexible</span></td><td>Moldes, detalle ligero</td></tr>
+        <tr><td>Masilla epóxica</td><td class="dots">●●●</td><td class="dots">●●●</td><td>Horas</td><td><span class="dots">●●●</span><span class="note">Unión muy dura</span></td><td><span class="dots">●●●</span><span class="note">Unión muy dura</span></td><td>Remaches, bisagras, piezas que se tocan</td></tr>
+        <tr><td>Silicón caliente</td><td class="dots">●○○</td><td class="dots">●○○</td><td>Segundos</td><td><span class="dots">●●○</span><span class="note">Agarra mejor en placa lijada</span></td><td><span class="dots">●○○</span><span class="note">Se desprende de lo liso</span></td><td>Veta, soldaduras, gotas de agua</td></tr>
+        <tr><td>Cinta de aluminio</td><td>Nada</td><td class="dots">●●○</td><td>Inmediato</td><td><span class="dots">●●●</span><span class="note">Se pega sola</span></td><td><span class="dots">●●●</span><span class="note">Se pega sola</span></td><td>Metal liso, placas, repujado</td></tr>
+        <tr><td>Gel o silicón transparente</td><td class="dots">●○○</td><td class="dots">●○○</td><td>1–3 días</td><td><span class="dots">●●●</span><span class="note">Funciona en caras verticales</span></td><td><span class="dots">●●○</span><span class="note">Raya la placa antes</span></td><td>Agua, cascadas, escurrimientos</td></tr>
+<tr><td>Resina epóxica</td><td class="dots">●●○</td><td class="dots">●●●</td><td>1–3 días</td><td><span class="dots">●●●</span><span class="note">Solo cara de arriba o pieza aparte</span></td><td><span class="dots">●●○</span><span class="note">Epóxica sí; poliéster no</span></td><td>Agua profunda, cristal, hielo, copias</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tblnote">Para que cualquier material dure más: lija la placa (120–220), limpia el polvo, imprima con resistol 1:1 y trabaja en capas delgadas. Sobre estireno, además, raya en cruz con cúter antes de aplicar. Prueba siempre en un recorte.</p>
+</section>
+
+<!-- 6 ACABADO -->
+<section id="acabado">
+  <div class="sec-head">
+    <span class="label">Acabado</span>
+    <h2>Pintar para que la textura se vea</h2>
+    <p>La textura sola no se lee en escena. La pintura en capas es la que marca relieves y sombras.</p>
+  </div>
+  <div class="finish">
+    <div><h3>Sellar</h3><p>Resistol 1:1 con agua o Mod Podge sobre todo. En espumas, mézclalo con acrílico negro.</p></div>
+    <div><h3>Base oscura</h3><p>Acrílico negro o café muy oscuro, aguado para que entre en todas las grietas.</p></div>
+    <div><h3>Pincel seco</h3><p>Carga poco color claro, descarga casi todo en un trapo y roza rápido. Solo pinta lo que sobresale.</p></div>
+    <div><h3>Lavados</h3><p>Pintura oscura muy diluida en las grietas para ensuciar. Luego otro pincel seco para recuperar luces.</p></div>
+    <div><h3>Detalles</h3><p>Verde en orillas (musgo), naranja óxido bajo remaches, tierra en la base.</p></div>
+  </div>
+</section>
+
+<!-- 7 SEGURIDAD -->
+<section id="seguridad">
+  <div class="safety">
+    <span class="label">Seguridad en el taller</span>
+    <h2>Antes de prender cualquier herramienta</h2>
+    <ul>
+      <li><b>PVC:</b> nunca cautín, alambre caliente, láser ni flama. Para doblarlo usa pistola de calor a distancia o agua caliente, con ventana abierta.</li>
+      <li><b>Pink foam y unicel:</b> si cortan con alambre caliente, háganlo con ventilación o extractor; los vapores son irritantes.</li>
+      <li><b>Lijado y polvos:</b> cubrebocas para el polvo de pasta para juntas, yeso, plásticos, grafito y gises pastel. Lentes al cortar.</li>
+      <li><b>Pistola de calor:</b> nunca apuntes a la piel ni dejes el aire fijo en un punto; la espuma se derrite en segundos.</li>
+      <li><b>Cocina de taller:</b> ollas y cucharas solo para manualidades. No comer en la mesa de trabajo.</li>
+      <li><b>Resinas:</b> guantes de nitrilo, lentes y ventilación siempre. La resina poliéster solo al aire libre. Detalles en el tema <a class="xref" href="#resinas">Resinas</a>.</li>
+      <li><b>Aerosoles y solventes:</b> al aire libre, lejos de espumas sin sellar.</li>
+      <li><b>Guardado:</b> masillas en frasco hermético con etiqueta y fecha. Si huelen a humedad o tienen puntos de moho, se tiran.</li>
+    </ul>
+  </div>
+
+  <div class="prec">
+    <div class="prec-box">
+      <h3>Precauciones con PVC espumado</h3>
+      <ul>
+        <li><b>Nunca lo quemes ni lo cortes con calor.</b> Nada de cautín, alambre caliente, láser, flama ni encendedor. Al quemarse o sobrecalentarse suelta gas de cloruro de hidrógeno, que irrita ojos y vías respiratorias.</li>
+        <li><b>Pistola de calor solo para curvar,</b> a distancia, moviéndola siempre y con la ventana abierta. Se ablanda alrededor de 65&nbsp;°C. Si humea, cambia de color o huele fuerte, ya te pasaste.</li>
+        <li><b>Corta con cúter en varias pasadas</b> y con regla metálica, en lugar de forzar un solo corte. Así el borde queda limpio y la navaja no se resbala.</li>
+        <li><b>Usa cubrebocas al lijar.</b> El polvo es fino y se queda en el aire. Limpia con trapo húmedo, no soples.</li>
+        <li><b>No lo dejes al sol ni en el coche.</b> Su temperatura de trabajo es baja (alrededor de 50–60&nbsp;°C) y puede deformarse.</li>
+        <li><b>Cuida la cara visible.</b> Aunque tiene película de fábrica, los golpes y las uñas dejan marca. Trabaja sobre una superficie limpia.</li>
+      </ul>
+    </div>
+    <div class="prec-box">
+      <h3>Precauciones con estireno</h3>
+      <ul>
+        <li><b>Es plástico inflamable.</b> Mantén lejos flama, cautín y cigarros. Si se quema, el humo es negro y tóxico.</li>
+        <li><b>Cemento para plásticos y solventes:</b> úsalos con ventilación, sin flama cerca, y tapa el frasco al terminar. Evita respirar los vapores y el contacto con la piel.</li>
+        <li><b>Kola loka (cianoacrilato):</b> pega la piel al instante y sus vapores irritan los ojos. Usa poquito, con palillo, y no acerques la cara mientras seca.</li>
+        <li><b>Corta marcando y doblando:</b> raya varias veces con cúter y regla, luego dobla para que truene por la línea. Los bordes quedan filosos: líjalos.</li>
+        <li><b>Aerosoles y pegamentos con solvente</b> pueden ablandarlo o arrugarlo. Prueba siempre en un recorte y aplica capas finas desde lejos.</li>
+        <li><b>Las placas delgadas se pandean</b> con calor y con masillas muy húmedas. Trabaja en capas delgadas y deja secar en plano, con peso encima si hace falta.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="canales">
+  <div class="sec-head">
+    <span class="label">Para seguir aprendiendo</span>
+    <h2>Canales de YouTube</h2>
+    <p>Modelistas, prop makers y creadores de escenografía que enseñan exactamente las técnicas de este cuaderno. La mayoría habla inglés: activa los subtítulos en YouTube y elige <b>Traducir automáticamente › Español</b>.</p>
+  </div>
+
+  <h3 class="yt-group">Utilería y escenografía</h3>
+  <div class="ytgrid">
+    <article class="yt" style="--yc:#B23A2B"><div class="yt-top"><span class="yt-av" aria-hidden="true">AS</span><h3>Adam Savage's Tested</h3></div><div class="yt-tags"><span class="chip">Utilería de cine</span><span class="chip">Inglés</span></div><p>Construcción de props, réplicas y trucos de taller del exconductor de MythBusters. Ideal para ver cómo se piensa una pieza de principio a fin.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Adam+Savage%27s+Tested" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#3F6585"><div class="yt-top"><span class="yt-av" aria-hidden="true">PP</span><h3>Punished Props Academy</h3></div><div class="yt-tags"><span class="chip">Props y armaduras</span><span class="chip">Inglés</span></div><p>Espuma EVA, sellado, pintura y acabados de metal envejecido explicados paso a paso.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Punished+Props+Academy" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#C24F78"><div class="yt-top"><span class="yt-av" aria-hidden="true">KC</span><h3>Kamui Cosplay</h3></div><div class="yt-tags"><span class="chip">Foami y foam clay</span><span class="chip">Inglés</span></div><p>Referente mundial en espuma EVA y foam clay. Muy útil para metal falso, oro, cuero y piedra en piezas ligeras.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Kamui+Cosplay" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#8A5A35"><div class="yt-top"><span class="yt-av" aria-hidden="true">UP</span><h3>Ultimate Paper Mache</h3></div><div class="yt-tags"><span class="chip">Papel maché</span><span class="chip">Inglés</span></div><p>Canal de Jonni Good, autora de la receta de masilla de papel maché de este cuaderno. Esculturas, máscaras y variantes de la receta.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Ultimate+Paper+Mache+Jonni+Good" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#4E8236"><div class="yt-top"><span class="yt-av" aria-hidden="true">NF</span><h3>Nerdforge</h3></div><div class="yt-tags"><span class="chip">Construcciones de fantasía</span><span class="chip">Inglés</span></div><p>Proyectos grandes que combinan escultura, texturas, pintura y luz. Buena inspiración para pensar la pieza como escenografía.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Nerdforge" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+  </div>
+
+  <h3 class="yt-group">Modelismo, terreno y texturas</h3>
+  <div class="ytgrid">
+    <article class="yt" style="--yc:#24211F"><div class="yt-top"><span class="yt-av" aria-hidden="true">BM</span><h3>Black Magic Craft</h3></div><div class="yt-tags"><span class="chip">Pink foam</span><span class="chip">Inglés</span></div><p>Terreno de fantasía con espuma XPS y materiales baratos. Piedra, madera y metal con técnicas muy rápidas.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Black+Magic+Craft" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#6F7466"><div class="yt-top"><span class="yt-av" aria-hidden="true">WA</span><h3>Wyloch's Armory</h3></div><div class="yt-tags"><span class="chip">Dioramas</span><span class="chip">Inglés</span></div><p>Escenarios y dioramas de fantasía con mucho detalle en piedra, madera y metal envejecido.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Wyloch%27s+Armory" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#8A5A35"><div class="yt-top"><span class="yt-av" aria-hidden="true">SC</span><h3>Storm the Castle</h3></div><div class="yt-tags"><span class="chip">Dioramas</span><span class="chip">Inglés</span></div><p>Más de mil videos de dioramas: espuma, rocas, agua y pintura. Varias técnicas de este cuaderno vienen de aquí.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Storm+the+Castle+diorama" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#2C7894"><div class="yt-top"><span class="yt-av" aria-hidden="true">LT</span><h3>Luke Towan</h3></div><div class="yt-tags"><span class="chip">Paisaje realista</span><span class="chip">Inglés</span></div><p>Escenarios muy realistas para maquetas: agua, pasto, roca y detalles naturales.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Luke+Towan" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#4E8236"><div class="yt-top"><span class="yt-av" aria-hidden="true">TT</span><h3>TheTerrainTutor</h3></div><div class="yt-tags"><span class="chip">Terreno</span><span class="chip">Inglés</span></div><p>Guías para construir terreno: selvas, ruinas, ciudades y superficies de todo tipo.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=TheTerrainTutor" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#3F6585"><div class="yt-top"><span class="yt-av" aria-hidden="true">LA</span><h3>Luke's APS</h3></div><div class="yt-tags"><span class="chip">Pintura rápida</span><span class="chip">Inglés</span></div><p>Pintura y texturizado rápidos de bases y miniaturas. Útil para pincel seco y lavados.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Luke%27s+APS" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#2C7894"><div class="yt-top"><span class="yt-av" aria-hidden="true">KM</span><h3>Kathy Millatt</h3></div><div class="yt-tags"><span class="chip">Agua</span><span class="chip">Inglés</span></div><p>Modelismo ferroviario y miniatura, con contenido dedicado a modelar agua.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Kathy+Millatt" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#4E8236"><div class="yt-top"><span class="yt-av" aria-hidden="true">WS</span><h3>Woodland Scenics</h3></div><div class="yt-tags"><span class="chip">Pasto, agua, rocas</span><span class="chip">Inglés</span></div><p>Canal de la marca de materiales para maquetas. Explica técnicas de escenografía en miniatura que se adaptan con materiales caseros.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Woodland+Scenics" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+    <article class="yt" style="--yc:#B23A2B"><div class="yt-top"><span class="yt-av" aria-hidden="true">TG</span><h3>Toni G Castroviejo</h3></div><div class="yt-tags"><span class="chip">Modelismo a escala</span><span class="chip">Español</span></div><p>Modelismo en plástico, construcción desde cero y dioramas, en español.</p><a class="yt-go" href="https://www.youtube.com/results?search_query=Toni+G+Castroviejo" target="_blank" rel="noopener">Ver en YouTube ↗</a></article>
+  </div>
+</section>
+
+<section class="sources" id="fuentes">
+  <div class="sec-head"><span class="label">Para profundizar</span><h2>Fuentes</h2></div>
+  <ol>
+    <li><a href="https://www.instructables.com/Paper-Mache-Clay" target="_blank" rel="noopener">Instructables · Paper Mache Clay</a> (receta de Jonni Good)</li>
+    <li><a href="https://www.apieceofrainbow.com/paper-mache-clay/" target="_blank" rel="noopener">A Piece of Rainbow · 4 recetas de paper mache clay</a></li>
+    <li><a href="https://www.instructables.com/Coffee-Clay" target="_blank" rel="noopener">Instructables · Coffee Clay</a></li>
+    <li><a href="https://service.polymech.info/api/vfs/get/machines/resources/polymech/howtos/coaster-from-coffee-waste/README.md" target="_blank" rel="noopener">Precious Plastic / Polymech · Coaster from coffee waste</a></li>
+    <li><a href="https://www.consumer.es/?p=80429" target="_blank" rel="noopener">Consumer · Consejos para trabajar porcelana fría</a></li>
+    <li><a href="https://instructables.com/How-to-Texture-Foam" target="_blank" rel="noopener">Instructables · How to Texture Foam</a></li>
+    <li><a href="https://stormthecastle.com/how-to-make-a/fast-easy-dungeon-terrain-make-the-walls-part-3.htm" target="_blank" rel="noopener">Storm the Castle · Pintar y sellar espuma XPS</a></li>
+    <li><a href="https://ixl.uid.umu.se/wp-content/uploads/2022/03/XPS-foam.pdf" target="_blank" rel="noopener">Umeå Institute of Design · XPS foam for prop making (PDF)</a></li>
+    <li><a href="https://hon3annual.com/turning-styrene-into-wood/" target="_blank" rel="noopener">HOn3 Annual · Turning Styrene into Wood</a></li>
+    <li><a href="https://thegraphicsfairy.com/diy-modeling-paste-techniques" target="_blank" rel="noopener">The Graphics Fairy · DIY Modeling Paste</a></li>
+    <li><a href="https://feroca.com/en/goma-eva/1302-eva-air-blanca-foam-clay-profesional-.html" target="_blank" rel="noopener">Feroca · Ficha técnica de foam clay</a></li>
+    <li><a href="https://www.nycfirst.org/codex-materials/pvc" target="_blank" rel="noopener">NYC FIRST · Seguridad con PVC</a></li>
+    <li><a href="https://spectrum.rosco.com/index.php/2018/03/pro-tips-for-painting-pretty-patinas" target="_blank" rel="noopener">Rosco Spectrum · Pátinas de cobre y bronce</a></li>
+    <li><a href="https://www.world-of-railways.co.uk/techniques/how-to-create-rust-with-hairspray" target="_blank" rel="noopener">World of Railways · Óxido con laca para el cabello</a></li>
+    <li><a href="https://frontlinegaming.org/2022/02/09/jps-hobby-hangout-salt-chipping/" target="_blank" rel="noopener">Frontline Gaming · Despostillado con sal</a></li>
+    <li><a href="https://www.thisoldhouse.com/painting/how-to-paint-easy-faux-wood-grain" target="_blank" rel="noopener">This Old House · Veta de madera pintada</a></li>
+    <li><a href="https://inmyownstyle.com/faux-carrara-marble-painting-technique.html" target="_blank" rel="noopener">In My Own Style · Mármol Carrara pintado</a></li>
+    <li><a href="https://precisionboard.com/2013/12/24/painting-faux-granite-or-concrete" target="_blank" rel="noopener">Precision Board · Granito y concreto pintados</a></li>
+    <li><a href="https://www.therpf.com/forums/threads/graphite-on-paint-technique-help.240084/" target="_blank" rel="noopener">The RPF · Grafito sobre pintura para metal</a></li>
+    <li><a href="https://stormthecastle.com/diorama/diorama-water-and-water-effects.htm" target="_blank" rel="noopener">Storm the Castle · Agua y efectos de agua en dioramas</a></li>
+    <li><a href="https://forum.trains.com/t/easy-cheap-grass/73465" target="_blank" rel="noopener">Trains.com · Pasto barato para maquetas</a></li>
+    <li><a href="https://knightsofdice.com/making-flock-for-wargaming-scenery-terrain/" target="_blank" rel="noopener">Knights of Dice · Flock y pasto estático</a></li>
+    <li><a href="https://www.smooth-on.com/products/epoxacast-692-deep-pour/" target="_blank" rel="noopener">Smooth-On · Ficha de resina epóxica de vaciado profundo</a></li>
+    <li><a href="https://www.smooth-on.com/products/smooth-cast-322/" target="_blank" rel="noopener">Smooth-On · Ficha de resina de poliuretano Smooth-Cast 322</a></li>
+    <li><a href="https://www.psubs.org/mlist/archive/0206/msg00125.html" target="_blank" rel="noopener">PSUBS · Resina poliéster y espuma de poliestireno</a></li>
+    <li><a href="https://woodvault.com/blogs/the-wood-vault/how-to-make-a-project-using-uv-resin" target="_blank" rel="noopener">Wood Vault · Cómo usar resina UV</a></li>
+    <li><a href="https://starscenic.com/products/modern-masters-metal-effects-reactive-iron" target="_blank" rel="noopener">Star Scenic · Pintura reactiva de hierro y activador</a></li>
+    <li><a href="https://therpf.com/forums/threads/simulating-rust.250729" target="_blank" rel="noopener">The RPF · Métodos para óxido en utilería</a></li>
+  </ol>
+</section>
+
+<a href="#" class="totop" id="totop" hidden aria-label="Volver arriba de la página">↑</a>
+<nav class="pager" id="pager" aria-label="Navegación entre temas" hidden></nav>
+</div>
+
+<script>
+(function(){
+  var order=[
+    ["base","Preparar la base","Antes y después"],
+    ["materiales","Materiales libres","Antes y después"],
+    ["madera","Madera","Las tres materias"],
+    ["metal","Metal","Las tres materias"],
+    ["piedra","Piedra","Las tres materias"],
+    ["ilusiones","Agua, pasto y metal falsos","Recetario y trucos"],
+    ["recetas","Masillas y pastas","Recetario y trucos"],
+    ["espumas","Espumas","Recetario y trucos"],
+    ["resinas","Resinas","Recetario y trucos"],
+    ["comparar","¿Cuál uso?","Decidir y cuidarte"],
+    ["acabado","Pintura y acabado","Antes y después"],
+    ["seguridad","Seguridad y precauciones","Decidir y cuidarte"],
+    ["canales","Canales de YouTube","Para seguir aprendiendo"],
+    ["fuentes","Fuentes","Para seguir aprendiendo"]
+  ];
+  var ids=order.map(function(o){return o[0]});
+  var byId={}; order.forEach(function(o){byId[o[0]]=o});
+  var wrap=document.querySelector('.wrap');
+  var pager=document.getElementById('pager');
+  var crumb=document.getElementById('crumb');
+  var totop=document.getElementById('totop');
+  var baseTitle=document.title;
+  var pendingTarget=null;
+
+  ids.forEach(function(id){var el=document.getElementById(id); if(el) el.classList.add('page');});
+  wrap.classList.add('platform');
+
+  /* ids para cada ficha: permite enlazar directo a una técnica */
+  function slug(t){return t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,48)}
+  ids.forEach(function(id){
+    var sec=document.getElementById(id); if(!sec) return;
+    sec.querySelectorAll('.v,.trick,.best-box,.mat-group,.yt,.prec-box,.il').forEach(function(el){
+      if(el.id) return;
+      var h=el.querySelector('h3,h4'); if(!h) return;
+      var hc=h.cloneNode(true); hc.querySelectorAll('.ok').forEach(function(o){o.remove()});
+      var cand=id+'-'+slug(hc.textContent.replace(/^\s*\d+\s·\s/,'')), n=2, base=cand;
+      while(document.getElementById(cand)) cand=base+'-'+(n++);
+      el.id=cand;
+    });
+  });
+
+  /* conexiones: cada material mencionado lleva a su receta o tema */
+  var glossary=[
+    [/masilla de borra|masilla de café|borra de café seca/i,'cafe'],
+    [/masilla de (papel )?mach[eé]|papel mach[eé]/i,'mache'],
+    [/pasta francesa|porcelana fr[ií]a/i,'francesa'],
+    [/pasta japonesa/i,'japonesa'],
+    [/pastas? ligeras?|pasta de modelar casera/i,'ligeras'],
+    [/pink foam|poliestireno extruido/i,'pinkfoam'],
+    [/foam clay|foami/i,'foamclay'],
+    [/pincel seco/i,'acabado'],
+    [/silic[oó]n transparente|gel (acr[ií]lico )?brillante/i,'ilusiones'],
+    [/resina ep[oó]xica|resina UV|resinas?\b/i,'resinas'],
+    [/[oó]xido real/i,'oxido-real-t'],
+    [/laca para el cabello/i,'metal-hierro-oxidado-con-despostillado'],
+    [/grafito/i,'metal-hierro-forjado-y-acero-oscuro'],
+    [/cinta de aluminio/i,'ilusiones-cinta-de-aluminio']
+  ];
+  var linkScope='.v ol li,.v .v-mat,.v .tipline,.trick p,.tip,.warn,.tipline,.il-note,.base li,.rs-list li,.best-box li,.prec-box li,.mat-group dd,.finish p,.card .main p,.card .side p,.variant p,.steps li';
+  document.querySelectorAll(linkScope).forEach(function(el){
+    var used={};
+    var walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return n.parentNode.closest('a,h3,h4,b,mark')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}});
+    var nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function(node){
+      glossary.forEach(function(g){
+        var target=g[1]; if(used[target]) return;
+        var tEl=document.getElementById(target); if(!tEl) return;
+        if(el.closest('#'+CSS.escape(target))) return; /* no enlazar a sí misma */
+        var m=node.nodeValue.match(g[0]); if(!m) return;
+        var a=document.createElement('a'); a.className='xref auto'; a.href='#'+target; a.textContent=m[0];
+        var after=node.splitText(m.index); after.nodeValue=after.nodeValue.slice(m[0].length);
+        node.parentNode.insertBefore(a,after);
+        used[target]=true; node=after;
+      });
+    });
+  });
+
+  function esc(t){return t.replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function norm(t){return t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
+  function titleOf(el){
+    if(el.tagName==='DT') return el.textContent.trim();
+    var h=el.querySelector('h3,h4'); return h?h.textContent.replace(/\s+/g,' ').trim():'';
+  }
+
+  /* En esta página: índice de fichas para saltar sin recordar dónde estaba algo */
+  var jumpSel='.v,.recipes > .card,.trick,.mat-group,.il,.yt,.prec-box,.best-box';
+  ids.forEach(function(id){
+    var sec=document.getElementById(id); if(!sec) return;
+    var items=[].slice.call(sec.querySelectorAll(jumpSel));
+    if(items.length<3) return;
+    var box=document.createElement('div'); box.className='onpage';
+    box.innerHTML='<span class="onpage-t">En esta página · '+items.length+' fichas</span><div class="onpage-list"></div>';
+    var list=box.querySelector('.onpage-list');
+    items.forEach(function(it){
+      var t=titleOf(it); if(!t) return;
+      var b=document.createElement('button'); b.type='button';
+      b.textContent=t.replace(/^\d+\s·\s/,'');
+      b.addEventListener('click',function(){goTo(it)});
+      list.appendChild(b);
+    });
+    var head=sec.querySelector('.elem-head')||sec.querySelector('.sec-head');
+    if(head) head.insertAdjacentElement('afterend',box);
+  });
+
+  function goTo(el){
+    el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+    el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+    var f=el.querySelector('h3,h4')||el; if(!f.hasAttribute('tabindex')) f.setAttribute('tabindex','-1'); f.focus({preventScroll:true});
+  }
+
+  /* Estado del sistema: dónde estoy y cuánto falta */
+  function render(){
+    var h=decodeURIComponent((location.hash||'').replace('#',''));
+    var i=ids.indexOf(h);
+    if(i<0&&h&&h!=='inicio'){
+      var el=document.getElementById(h), pg=el&&el.closest('section.page');
+      if(pg){ i=ids.indexOf(pg.id); if(!pendingTarget) pendingTarget=el; h=pg.id; }
+    }
+    wrap.classList.toggle('at-home',i<0);
+    wrap.classList.toggle('at-page',i>=0);
+    ids.forEach(function(id){var el=document.getElementById(id); if(el) el.classList.toggle('active',id===h);});
+    document.querySelectorAll('.appbar nav.toc a').forEach(function(a){
+      if(a.getAttribute('href')==='#'+h){a.setAttribute('aria-current','page'); a.scrollIntoView({block:'nearest',inline:'center'});}
+      else a.removeAttribute('aria-current');
+    });
+    if(i<0){
+      crumb.innerHTML='<span class="crumb-path">Menú de entrada</span><span class="crumb-step">'+ids.length+' temas disponibles</span>';
+      pager.hidden=true; pager.innerHTML=''; document.title=baseTitle;
+    }else{
+      var o=order[i];
+      crumb.innerHTML='<span class="crumb-path"><span>Inicio › '+esc(o[2])+' ›</span> '+esc(o[1])+'</span><span class="crumb-step">Tema '+(i+1)+' de '+ids.length+'</span>';
+      var prev=i>0?order[i-1]:null, next=i<order.length-1?order[i+1]:null;
+      pager.innerHTML=(prev?'<a href="#'+prev[0]+'"><small>← Anterior</small><b>'+esc(prev[1])+'</b></a>':'<a href="#inicio"><small>← Volver</small><b>Menú de entrada</b></a>')
+        +(next?'<a class="next" href="#'+next[0]+'"><small>Siguiente →</small><b>'+esc(next[1])+'</b></a>':'<a class="next" href="#inicio"><small>Terminar →</small><b>Menú de entrada</b></a>');
+      pager.hidden=false; document.title=o[1]+' · '+baseTitle;
+    }
+    if(pendingTarget){var t=pendingTarget; pendingTarget=null; requestAnimationFrame(function(){goTo(t)});}
+    else window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',render);
+
+  /* Volver arriba en páginas largas */
+  window.addEventListener('scroll',function(){totop.hidden=window.scrollY<700},{passive:true});
+  totop.addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});});
+
+  /* Búsqueda: reconocer en vez de recordar */
+  var index=[];
+  ids.forEach(function(id){
+    var sec=document.getElementById(id); if(!sec) return;
+    var h2=sec.querySelector('h2');
+    var sh=sec.querySelector('.sec-head');
+    index.push({page:id,el:sec,title:byId[id][1],body:sh?sh.textContent:(h2?h2.textContent:'')});
+    sec.querySelectorAll('.v,.card,.trick,.base,.finish > div,.best-box,.prec-box,.yt,.mat-group dt,.il-head').forEach(function(el){
+      var title=el.classList.contains('il-head')?el.querySelector('h3').textContent:titleOf(el);
+      var body=el.tagName==='DT'&&el.nextElementSibling?el.nextElementSibling.textContent:el.textContent;
+      index.push({page:id,el:el.classList.contains('il-head')?el.parentNode:el,title:title.replace(/\s+/g,' ').trim(),body:body.replace(/\s+/g,' ').trim()});
+    });
+  });
+  index.forEach(function(r){r.nt=norm(r.title);r.nb=norm(r.body)});
+
+  var q=document.getElementById('q'), res=document.getElementById('results'), sel=-1, current=[];
+  var suggestions=['óxido','mármol','borra','pasto','agua','cobre','tezontle','silicón','pink foam','quemada'];
+
+  function snippet(body,terms){
+    var nb=norm(body), pos=nb.indexOf(terms[0]); if(pos<0) pos=0;
+    var start=Math.max(0,pos-50), s=(start>0?'…':'')+body.slice(start,start+150)+(body.length>start+150?'…':'');
+    var out=esc(s);
+    terms.forEach(function(t){
+      if(t.length<2) return;
+      var ns=norm(out), i=ns.indexOf(t);
+      if(i>-1) out=out.slice(0,i)+'<mark>'+out.slice(i,i+t.length)+'</mark>'+out.slice(i+t.length);
+    });
+    return out;
+  }
+  function search(v){
+    var terms=norm(v).split(/\s+/).filter(Boolean);
+    if(!terms.length){close();return;}
+    current=index.map(function(r){
+      var score=0;
+      for(var k=0;k<terms.length;k++){
+        var t=terms[k], inT=r.nt.indexOf(t)>-1, inB=r.nb.indexOf(t)>-1;
+        if(!inT&&!inB) return null;
+        score+=(inT?5:0)+(inB?1:0);
+      }
+      if(r.el.tagName==='SECTION') score+=1;
+      return {r:r,score:score};
+    }).filter(Boolean).sort(function(a,b){return b.score-a.score}).slice(0,14);
+    sel=-1;
+    if(!current.length){
+      res.innerHTML='<div class="noresults"><span>No encontré <b>"'+esc(v)+'"</b>. Revisa la ortografía o prueba con una palabra más general:</span><div class="sugg">'+
+        suggestions.map(function(s){return '<button type="button" data-s="'+s+'">'+s+'</button>'}).join('')+'</div></div>';
+    }else{
+      res.innerHTML='<div class="results-head">'+current.length+(current.length===14?'+':'')+' resultados · Enter abre el primero</div>'+
+        current.map(function(c,n){
+          var r=c.r;
+          return '<button type="button" role="option" id="opt'+n+'" data-n="'+n+'"><span class="r-where">'+esc(byId[r.page][1])+'</span><span class="r-title">'+esc(r.title)+'</span><span class="r-snip">'+snippet(r.body,terms)+'</span></button>';
+        }).join('');
+    }
+    res.hidden=false; q.setAttribute('aria-expanded','true');
+  }
+  function close(){res.hidden=true;res.innerHTML='';q.setAttribute('aria-expanded','false');sel=-1}
+  function open(n){
+    var c=current[n]; if(!c) return;
+    close(); q.blur();
+    var target=c.r.el.tagName==='SECTION'?null:c.r.el;
+    if(location.hash==='#'+c.r.page){ if(target) goTo(target); else window.scrollTo(0,0); }
+    else { pendingTarget=target; location.hash=c.r.page; }
+  }
+  function mark(){
+    res.querySelectorAll('button[role=option]').forEach(function(b,n){b.setAttribute('aria-selected',n===sel?'true':'false'); if(n===sel) b.scrollIntoView({block:'nearest'});});
+    if(sel>-1) q.setAttribute('aria-activedescendant','opt'+sel); else q.removeAttribute('aria-activedescendant');
+  }
+  q.addEventListener('input',function(){search(q.value)});
+  q.addEventListener('focus',function(){if(q.value) search(q.value)});
+  q.addEventListener('keydown',function(e){
+    if(e.key==='ArrowDown'){e.preventDefault(); if(current.length){sel=Math.min(sel+1,current.length-1); mark();}}
+    else if(e.key==='ArrowUp'){e.preventDefault(); if(current.length){sel=Math.max(sel-1,0); mark();}}
+    else if(e.key==='Enter'){e.preventDefault(); open(sel>-1?sel:0);}
+    else if(e.key==='Escape'){ if(q.value){q.value=''; close();} else q.blur(); }
+  });
+  res.addEventListener('mousedown',function(e){e.preventDefault()});
+  res.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    if(b.dataset.s){q.value=b.dataset.s; search(b.dataset.s); q.focus(); return;}
+    open(+b.dataset.n);
+  });
+  q.addEventListener('blur',function(){setTimeout(function(){ if(document.activeElement!==q) close(); },120)});
+  document.addEventListener('keydown',function(e){
+    var tag=(document.activeElement||{}).tagName;
+    if(e.key==='/'&&tag!=='INPUT'&&tag!=='TEXTAREA'){e.preventDefault(); q.focus(); q.select();}
+  });
+
+  render();
+})();
+</script>
